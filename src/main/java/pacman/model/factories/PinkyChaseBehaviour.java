@@ -1,19 +1,27 @@
 package pacman.model.factories;
 
+import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostImpl;
 import pacman.model.entity.dynamic.physics.Direction;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.maze.Maze;
 import pacman.model.maze.MazeCreator;
 
+import java.util.List;
+
 public class PinkyChaseBehaviour implements GhostBehaviour {
     private static final double TARGET_DISTANCE = 4; // Tiles ahead of Pacman
     private static final double TILE_SIZE = MazeCreator.RESIZING_FACTOR;
-
+    private GhostImpl pinky;
     @Override
-    public void chasePostition(GhostImpl ghost) {
-        Vector2D pacmanPosition = ghost.getTargetLocation();
-        Direction pacmanDirection = ghost.getDirection();
+    public void chasePostition(List<Ghost> ghosts) {
+        ghosts.forEach(ghost -> {
+            if (ghost.getName() == 's') {
+                pinky = (GhostImpl) ghost;
+            }
+        });
+        Vector2D pacmanPosition = pinky.getTargetLocation();
+        Direction pacmanDirection = pinky.getDirection();
 
         Vector2D targetPosition;
         switch (pacmanDirection) {
@@ -34,6 +42,6 @@ public class PinkyChaseBehaviour implements GhostBehaviour {
                 break;
         }
 
-        ghost.setTargetLocation(targetPosition);
+        pinky.setTargetLocation(targetPosition);
     }
 }

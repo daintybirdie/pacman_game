@@ -70,23 +70,28 @@ public class GhostFactory implements RenderableFactory {
             GhostImpl ghost;
             Vector2D targetCorner = null;
             GhostBehaviour chaseBehaviour = null;
+            char name;
 
             switch (renderableType) {
                 case 'c':
                     chaseBehaviour = new ClydeChaseBehaviour();
                     targetCorner = new Vector2D(0, BOTTOM_Y_POSITION_OF_MAP);
+                    name = renderableType;
                     break;
                 case 'b':
                     chaseBehaviour = new BlinkyChaseBehaviour();
                     targetCorner = new Vector2D(RIGHT_X_POSITION_OF_MAP, TOP_Y_POSITION_OF_MAP);
+                    name = renderableType;
                     break;
                 case 'i':
                     chaseBehaviour = new BlinkyChaseBehaviour();
                     targetCorner = new Vector2D(RIGHT_X_POSITION_OF_MAP, BOTTOM_Y_POSITION_OF_MAP);
+                    name = renderableType;
                     break;
                 case 's':
                     chaseBehaviour = new PinkyChaseBehaviour();
                     targetCorner = new Vector2D(0, TOP_Y_POSITION_OF_MAP);
+                    name = renderableType;
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown ghost type");
@@ -97,7 +102,8 @@ public class GhostFactory implements RenderableFactory {
                     boundingBox,
                     kinematicState,
                     GhostMode.SCATTER,
-                    targetCorner
+                    targetCorner,
+                    name
             );
 
             ghost.setGhostBehaviour(chaseBehaviour);

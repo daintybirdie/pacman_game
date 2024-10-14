@@ -32,4 +32,6 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
     void setTargetCorner(Vector2D vector2D);
 
     void setGhostBehaviour(GhostBehaviour ghostBehaviour);
+
+    char getName();
 }

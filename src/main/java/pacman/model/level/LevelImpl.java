@@ -132,7 +132,7 @@ public class LevelImpl implements Level {
 
                 ghosts.forEach(ghost -> {
                     if (this.currentGhostMode == GhostMode.CHASE) {
-                        ghost.getGhostBehaviour().chasePostition((GhostImpl) ghost);
+                        ghost.getGhostBehaviour().chasePostition(ghosts);
                     }
                 });
                 maze.updatePossibleDirections(dynamicEntity);

@@ -30,8 +30,9 @@ public class GhostImpl implements Ghost {
     private Map<GhostMode, Double> speeds;
     private int currentDirectionCount = 0;
     private GhostBehaviour ghostBehaviour;
+    private char name;
 
-    public GhostImpl(Image image, BoundingBox boundingBox, KinematicState kinematicState, GhostMode ghostMode, Vector2D targetCorner) {
+    public GhostImpl(Image image, BoundingBox boundingBox, KinematicState kinematicState, GhostMode ghostMode, Vector2D targetCorner, char name) {
         this.image = image;
         this.boundingBox = boundingBox;
         this.kinematicState = kinematicState;
@@ -41,6 +42,7 @@ public class GhostImpl implements Ghost {
         this.targetCorner = targetCorner;
         this.targetLocation = getTargetLocation();
         this.currentDirection = null;
+        this.name = name;
     }
 
     @Override
@@ -112,6 +114,11 @@ public class GhostImpl implements Ghost {
             case SCATTER -> this.targetCorner;
         };
     }
+
+    public char getName() {
+        return name;
+    }
+
 
     public void setPlayerPosition(Vector2D position) {
         this.playerPosition = position;

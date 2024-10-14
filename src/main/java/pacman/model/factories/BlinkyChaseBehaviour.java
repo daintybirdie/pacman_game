@@ -1,13 +1,15 @@
 package pacman.model.factories;
 
+import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostImpl;
-import pacman.model.entity.dynamic.physics.Direction;
-import pacman.model.entity.dynamic.physics.Vector2D;
+
+import java.util.List;
+
 
 public class BlinkyChaseBehaviour implements GhostBehaviour {
 
     @Override
-    public void chasePostition(GhostImpl ghost) {
+    public void chasePostition(List<Ghost> ghosts) {
         //default behaviour
     }
 
