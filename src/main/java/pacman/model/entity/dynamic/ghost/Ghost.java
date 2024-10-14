@@ -3,6 +3,7 @@ package pacman.model.entity.dynamic.ghost;
 import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
+import pacman.model.factories.GhostBehaviour;
 
 import java.util.Map;
 
@@ -24,7 +25,11 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
      */
     void setGhostMode(GhostMode ghostMode);
 
-    Vector2D getPlayerPosition();
-
     void setTargetLocation(Vector2D vector2D);
+
+    GhostBehaviour getGhostBehaviour();
+
+    void setTargetCorner(Vector2D vector2D);
+
+    void setGhostBehaviour(GhostBehaviour ghostBehaviour);
 }

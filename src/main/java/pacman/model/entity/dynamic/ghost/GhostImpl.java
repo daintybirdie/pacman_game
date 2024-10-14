@@ -3,6 +3,8 @@ package pacman.model.entity.dynamic.ghost;
 import javafx.scene.image.Image;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.physics.*;
+import pacman.model.factories.GhostBehaviour;
+import pacman.model.factories.GhostFactory;
 import pacman.model.level.Level;
 import pacman.model.maze.Maze;
 
@@ -18,7 +20,7 @@ public class GhostImpl implements Ghost {
     private final Image image;
     private final BoundingBox boundingBox;
     private final Vector2D startingPosition;
-    private final Vector2D targetCorner;
+    private Vector2D targetCorner;
     private KinematicState kinematicState;
     private GhostMode ghostMode;
     private Vector2D targetLocation;
@@ -27,6 +29,7 @@ public class GhostImpl implements Ghost {
     private Set<Direction> possibleDirections;
     private Map<GhostMode, Double> speeds;
     private int currentDirectionCount = 0;
+    private GhostBehaviour ghostBehaviour;
 
     public GhostImpl(Image image, BoundingBox boundingBox, KinematicState kinematicState, GhostMode ghostMode, Vector2D targetCorner) {
         this.image = image;
@@ -50,11 +53,22 @@ public class GhostImpl implements Ghost {
         return image;
     }
 
+
     @Override
     public void update() {
         this.updateDirection();
         this.kinematicState.update();
         this.boundingBox.setTopLeft(this.kinematicState.getPosition());
+    }
+
+    @Override
+    public GhostBehaviour getGhostBehaviour() {
+        return ghostBehaviour;
+    }
+
+    @Override
+    public void setGhostBehaviour(GhostBehaviour ghostBehaviour) {
+        this.ghostBehaviour = ghostBehaviour;
     }
 
     private void updateDirection() {
@@ -79,21 +93,28 @@ public class GhostImpl implements Ghost {
         }
     }
 
-    @Override
-    public Vector2D getPlayerPosition() {
-        return this.playerPosition;
-    }
-
+    // This was a complete copy of setPosition. Changed to set player position when in chase mode.
     @Override
     public void setTargetLocation(Vector2D vector2D) {
-        this.kinematicState.setPosition(vector2D);
+        if (this.ghostMode == GhostMode.CHASE) {
+            this.playerPosition = vector2D;
+        }
     }
 
-    private Vector2D getTargetLocation() {
+    @Override
+    public void setTargetCorner(Vector2D vector2D) {
+        this.targetCorner = targetCorner;
+    }
+
+    public Vector2D getTargetLocation() {
         return switch (this.ghostMode) {
             case CHASE -> this.playerPosition;
             case SCATTER -> this.targetCorner;
         };
+    }
+
+    public void setPlayerPosition(Vector2D position) {
+        this.playerPosition = position;
     }
 
     private Direction selectDirection(Set<Direction> possibleDirections) {

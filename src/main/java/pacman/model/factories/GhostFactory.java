@@ -20,12 +20,12 @@ public class GhostFactory implements RenderableFactory {
     private static final int RIGHT_X_POSITION_OF_MAP = 448;
     private static final int TOP_Y_POSITION_OF_MAP = 16 * 3;
     private static final int BOTTOM_Y_POSITION_OF_MAP = 16 * 34;
-
     private static final Image BLINKY_IMAGE = new Image("maze/ghosts/blinky.png");
     private static final Image INKY_IMAGE = new Image("maze/ghosts/inky.png");
     private static final Image CLYDE_IMAGE = new Image("maze/ghosts/clyde.png");
     private static final Image PINKY_IMAGE = new Image("maze/ghosts/pinky.png");
     private static final Image GHOST_IMAGE = BLINKY_IMAGE;
+    private char renderableType;
     List<Vector2D> targetCorners = Arrays.asList(
             new Vector2D(0, TOP_Y_POSITION_OF_MAP),
             new Vector2D(RIGHT_X_POSITION_OF_MAP, TOP_Y_POSITION_OF_MAP),
@@ -42,14 +42,9 @@ public class GhostFactory implements RenderableFactory {
         IMAGES.put('i', INKY_IMAGE);
         IMAGES.put('c', CLYDE_IMAGE);
     }
-    List<Image> imagesTaken = Arrays.asList(
-            BLINKY_IMAGE,
-            INKY_IMAGE,
-            CLYDE_IMAGE,
-            PINKY_IMAGE
-    );
 
     public GhostFactory(char renderableType) {
+        this.renderableType = renderableType;
         this.image = IMAGES.get(renderableType);
     }
 
@@ -58,12 +53,7 @@ public class GhostFactory implements RenderableFactory {
     }
 
     @Override
-    public Renderable createRenderable(
-            Vector2D position
-    )
-
-
-    {
+    public Renderable createRenderable(Vector2D position) {
         try {
             position = position.add(new Vector2D(4, -4));
 
@@ -77,12 +67,43 @@ public class GhostFactory implements RenderableFactory {
                     .setPosition(position)
                     .build();
 
-            return new GhostImpl(
+            GhostImpl ghost;
+            Vector2D targetCorner = null;
+            GhostBehaviour chaseBehaviour = null;
+
+            switch (renderableType) {
+                case 'c':
+                    chaseBehaviour = new ClydeChaseBehaviour();
+                    targetCorner = new Vector2D(0, BOTTOM_Y_POSITION_OF_MAP);
+                    break;
+                case 'b':
+                    chaseBehaviour = new BlinkyChaseBehaviour();
+                    targetCorner = new Vector2D(RIGHT_X_POSITION_OF_MAP, TOP_Y_POSITION_OF_MAP);
+                    break;
+                case 'i':
+                    chaseBehaviour = new BlinkyChaseBehaviour();
+                    targetCorner = new Vector2D(RIGHT_X_POSITION_OF_MAP, BOTTOM_Y_POSITION_OF_MAP);
+                    break;
+                case 's':
+                    chaseBehaviour = new PinkyChaseBehaviour();
+                    targetCorner = new Vector2D(0, TOP_Y_POSITION_OF_MAP);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown ghost type");
+            }
+
+            ghost = new GhostImpl(
                     image,
                     boundingBox,
                     kinematicState,
                     GhostMode.SCATTER,
-                    targetCorners.get(getRandomNumber(0, targetCorners.size() - 1)));
+                    targetCorner
+            );
+
+            ghost.setGhostBehaviour(chaseBehaviour);
+
+            return ghost;
+
         } catch (Exception e) {
             throw new ConfigurationParseException(
                     String.format("Invalid ghost configuration | %s ", e));

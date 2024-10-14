@@ -6,6 +6,7 @@ import pacman.model.engine.observer.GameState;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.ghost.Ghost;
+import pacman.model.entity.dynamic.ghost.GhostImpl;
 import pacman.model.entity.dynamic.ghost.GhostMode;
 import pacman.model.entity.dynamic.physics.PhysicsEngine;
 import pacman.model.entity.dynamic.player.Controllable;
@@ -128,8 +129,15 @@ public class LevelImpl implements Level {
             List<DynamicEntity> dynamicEntities = getDynamicEntities();
 
             for (DynamicEntity dynamicEntity : dynamicEntities) {
+
+                ghosts.forEach(ghost -> {
+                    if (this.currentGhostMode == GhostMode.CHASE) {
+                        ghost.getGhostBehaviour().chasePostition((GhostImpl) ghost);
+                    }
+                });
                 maze.updatePossibleDirections(dynamicEntity);
-                dynamicEntity.update();
+                    dynamicEntity.update();
+
             }
 
             for (int i = 0; i < dynamicEntities.size(); ++i) {
