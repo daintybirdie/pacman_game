@@ -8,7 +8,9 @@ import pacman.model.entity.dynamic.ghost.GhostMode;
 import pacman.model.entity.dynamic.physics.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Concrete renderable factory for Ghost objects
@@ -30,6 +32,26 @@ public class GhostFactory implements RenderableFactory {
             new Vector2D(0, BOTTOM_Y_POSITION_OF_MAP),
             new Vector2D(RIGHT_X_POSITION_OF_MAP, BOTTOM_Y_POSITION_OF_MAP)
     );
+    private final Image image;
+
+    static Map<Character, Image> IMAGES = new HashMap<>();
+
+    static {
+        IMAGES.put('b', BLINKY_IMAGE);
+        IMAGES.put('s', PINKY_IMAGE);
+        IMAGES.put('i', INKY_IMAGE);
+        IMAGES.put('c', CLYDE_IMAGE);
+    }
+    List<Image> imagesTaken = Arrays.asList(
+            BLINKY_IMAGE,
+            INKY_IMAGE,
+            CLYDE_IMAGE,
+            PINKY_IMAGE
+    );
+
+    public GhostFactory(char renderableType) {
+        this.image = IMAGES.get(renderableType);
+    }
 
     private int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
@@ -38,14 +60,17 @@ public class GhostFactory implements RenderableFactory {
     @Override
     public Renderable createRenderable(
             Vector2D position
-    ) {
+    )
+
+
+    {
         try {
             position = position.add(new Vector2D(4, -4));
 
             BoundingBox boundingBox = new BoundingBoxImpl(
                     position,
-                    GHOST_IMAGE.getHeight(),
-                    GHOST_IMAGE.getWidth()
+                    image.getHeight(),
+                    image.getWidth()
             );
 
             KinematicState kinematicState = new KinematicStateImpl.KinematicStateBuilder()
@@ -53,7 +78,7 @@ public class GhostFactory implements RenderableFactory {
                     .build();
 
             return new GhostImpl(
-                    GHOST_IMAGE,
+                    image,
                     boundingBox,
                     kinematicState,
                     GhostMode.SCATTER,

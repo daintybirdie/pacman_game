@@ -79,6 +79,16 @@ public class GhostImpl implements Ghost {
         }
     }
 
+    @Override
+    public Vector2D getPlayerPosition() {
+        return this.playerPosition;
+    }
+
+    @Override
+    public void setTargetLocation(Vector2D vector2D) {
+        this.kinematicState.setPosition(vector2D);
+    }
+
     private Vector2D getTargetLocation() {
         return switch (this.ghostMode) {
             case CHASE -> this.playerPosition;

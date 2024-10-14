@@ -60,9 +60,18 @@ public class Maze {
         if (renderable != null) {
             if (renderableType == RenderableType.PACMAN) {
                 this.pacman = renderable;
-            } else if (renderableType == RenderableType.GHOST) {
+            } else if (renderableType == RenderableType.BLINKY) {
                 this.ghosts.add(renderable);
-            } else if (renderableType == RenderableType.PELLET) {
+            }
+            else if (renderableType == RenderableType.INKY) {
+                this.ghosts.add(renderable);
+            }
+            else if (renderableType == RenderableType.PINKY) {
+                this.ghosts.add(renderable);
+            }
+            else if (renderableType == RenderableType.CLYDE) {
+                this.ghosts.add(renderable);
+            }else if (renderableType == RenderableType.PELLET) {
                 this.pellets.add(renderable);
             } else {
                 this.isWall.put(formatCoordinates(x, y), true);
