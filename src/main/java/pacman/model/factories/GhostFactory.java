@@ -84,7 +84,7 @@ public class GhostFactory implements RenderableFactory {
                     name = renderableType;
                     break;
                 case 'i':
-                    chaseBehaviour = new BlinkyChaseBehaviour();
+                    chaseBehaviour = new InkyChaseBehaviour();
                     targetCorner = new Vector2D(RIGHT_X_POSITION_OF_MAP, BOTTOM_Y_POSITION_OF_MAP);
                     name = renderableType;
                     break;
