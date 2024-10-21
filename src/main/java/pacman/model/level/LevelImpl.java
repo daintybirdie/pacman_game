@@ -13,6 +13,8 @@ import pacman.model.entity.dynamic.player.Controllable;
 import pacman.model.entity.dynamic.player.Pacman;
 import pacman.model.entity.staticentity.StaticEntity;
 import pacman.model.entity.staticentity.collectable.Collectable;
+import pacman.model.entity.staticentity.collectable.Pellet;
+import pacman.model.entity.staticentity.collectable.PowerPellet;
 import pacman.model.level.observer.LevelStateObserver;
 import pacman.model.maze.Maze;
 
@@ -183,10 +185,22 @@ public class LevelImpl implements Level {
 
     @Override
     public void collect(Collectable collectable) {
-        this.points += collectable.getPoints();
-        notifyObserversWithScoreChange(collectable.getPoints());
-        this.collectables.remove(collectable);
+        Pellet pellet = (Pellet) collectable;
+        this.points += pellet.getPoints();
+
+        // Check if it's a PowerPellet to activate frightened mode
+        if (collectable instanceof PowerPellet) {
+            // Activate frightened mode for all ghosts
+            for (Ghost ghost : ghosts) {
+                if (ghost instanceof GhostImpl) { // Ensure the ghost is of type GhostImpl
+                    ((GhostImpl) ghost).activateFrightenedMode();
+                }
+            }
+        }
     }
+
+
+
 
     @Override
     public void handleLoseLife() {

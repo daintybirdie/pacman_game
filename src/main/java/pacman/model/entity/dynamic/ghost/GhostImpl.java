@@ -14,10 +14,9 @@ import java.util.*;
  * Concrete implementation of Ghost entity in Pac-Man Game
  */
 public class GhostImpl implements Ghost {
-
     private static final int minimumDirectionCount = 8;
     private final Layer layer = Layer.FOREGROUND;
-    private final Image image;
+    private Image image;
     private final BoundingBox boundingBox;
     private final Vector2D startingPosition;
     private Vector2D targetCorner;
@@ -31,8 +30,21 @@ public class GhostImpl implements Ghost {
     private int currentDirectionCount = 0;
     private GhostBehaviour ghostBehaviour;
     private char name;
+    // IMAGES
+    private Image normalImage;
+    private Image frightenedImage;
+    private Image currentImage;
 
-    public GhostImpl(Image image, BoundingBox boundingBox, KinematicState kinematicState, GhostMode ghostMode, Vector2D targetCorner, char name) {
+    // State management
+    private GhostState currentState; // New field for state management
+    private final GhostState normalState = new NormalState(); // Normal state
+    private final GhostState frightenedState = new FrightenedState(); // Frightened state
+
+    private static final double SOME_DISTANCE = 50;
+
+
+    public GhostImpl(Image image, BoundingBox boundingBox, KinematicState kinematicState, GhostMode ghostMode, Vector2D targetCorner, char name,
+                     Image normalImage, Image frightenedImage) {
         this.image = image;
         this.boundingBox = boundingBox;
         this.kinematicState = kinematicState;
@@ -43,7 +55,37 @@ public class GhostImpl implements Ghost {
         this.targetLocation = getTargetLocation();
         this.currentDirection = null;
         this.name = name;
+        this.normalImage = normalImage;
+        this.frightenedImage = frightenedImage;
+        this.currentState = normalState; // Start in normal state
     }
+
+    public void setCurrentImage(Image image) {
+        this.image = image; // This will update the image shown for the ghost
+    }
+
+    public Image getNormalImage() {
+        return normalImage; // Return normal ghost image
+    }
+
+    public Image getFrightenedImage() {
+        return frightenedImage; // Return frightened ghost image
+    }
+
+    // Method to activate frightened mode
+    public void activateFrightenedMode() {
+        currentState.deactivate(this); // Deactivate current state
+        currentState = frightenedState; // Switch to frightened state
+        currentState.activate(this); // Activate new state
+    }
+
+    // Method to deactivate frightened mode
+    public void deactivateFrightenedMode() {
+        currentState.deactivate(this); // Deactivate current state
+        currentState = normalState; // Switch to normal state
+        currentState.activate(this); // Activate new state
+    }
+
 
     @Override
     public void setSpeeds(Map<GhostMode, Double> speeds) {
@@ -95,6 +137,7 @@ public class GhostImpl implements Ghost {
         }
     }
 
+
     // Added this message to ensure we can change the target's position based on GhostMode
     @Override
     public void setTargetLocation(Vector2D vector2D) {
@@ -105,10 +148,30 @@ public class GhostImpl implements Ghost {
 
     public Vector2D getTargetLocation() {
         return switch (this.ghostMode) {
-            case CHASE -> this.playerPosition;
-            case SCATTER -> this.targetCorner;
+            case CHASE -> this.playerPosition; // Move towards the player in CHASE mode
+            case SCATTER -> this.targetCorner; // Move towards the corner in SCATTER mode
+            case FRIGHTENED -> getFrightenedTargetLocation(); // Move away from the player in FRIGHTENED mode
         };
     }
+
+    /**
+     * Calculates a target location away from the player position when in FRIGHTENED mode.
+     *
+     * @return A Vector2D that represents a location away from the player's position.
+     */
+    private Vector2D getFrightenedTargetLocation() {
+        // Calculate a direction vector away from the player position
+        Vector2D currentPosition = this.kinematicState.getPosition(); // Get current position of the ghost
+        Vector2D directionAwayFromPlayer = this.playerPosition.subtract(currentPosition).normalize(); // Normalize to get a unit vector
+        Vector2D awayFromPlayerLocation = currentPosition.add(directionAwayFromPlayer.scale(SOME_DISTANCE)); // Scale by a distance
+
+        // Ensure the new location is valid in the game context (not colliding with walls, etc.)
+        // You may need additional checks to validate the target location within the maze
+
+        return awayFromPlayerLocation; // Return the calculated target location
+    }
+
+
 
     public char getName() {
         return name;
@@ -148,8 +211,15 @@ public class GhostImpl implements Ghost {
     public void setGhostMode(GhostMode ghostMode) {
         this.ghostMode = ghostMode;
         this.kinematicState.setSpeed(speeds.get(ghostMode));
-        // ensure direction is switched
+        // Ensure direction is switched
         this.currentDirectionCount = minimumDirectionCount;
+
+        // Activate frightened mode if necessary
+        if (ghostMode == GhostMode.FRIGHTENED) {
+            activateFrightenedMode();
+        } else {
+            deactivateFrightenedMode();
+        }
     }
 
     @Override

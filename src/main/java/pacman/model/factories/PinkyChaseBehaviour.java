@@ -15,11 +15,12 @@ public class PinkyChaseBehaviour implements GhostBehaviour {
     private GhostImpl pinky;
     @Override
     public void chasePostition(List<Ghost> ghosts) {
-        ghosts.forEach(ghost -> {
+        for (Ghost ghost :ghosts)
             if (ghost.getName() == 's') {
                 pinky = (GhostImpl) ghost;
+                break;
             }
-        });
+
         Vector2D pacmanPosition = pinky.getTargetLocation();
         Direction pacmanDirection = pinky.getDirection();
 

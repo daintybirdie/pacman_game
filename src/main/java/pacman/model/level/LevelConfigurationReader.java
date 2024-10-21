@@ -36,9 +36,9 @@ public class LevelConfigurationReader {
         JSONObject modeLengthsObject = (JSONObject) levelConfiguration.get("modeLengths");
         ghostModeLengths.put(GhostMode.CHASE, ((Number) modeLengthsObject.get("chase")).intValue());
         ghostModeLengths.put(GhostMode.SCATTER, ((Number) modeLengthsObject.get("scatter")).intValue());
+        ghostModeLengths.put(GhostMode.FRIGHTENED, ((Number) modeLengthsObject.get("frightened")).intValue()); // Add this line
         return ghostModeLengths;
     }
-
 
     /**
      * Retrieves the speeds of the ghosts for each ghost mode
@@ -50,6 +50,7 @@ public class LevelConfigurationReader {
         JSONObject ghostSpeed = (JSONObject) levelConfiguration.get("ghostSpeed");
         ghostSpeeds.put(GhostMode.CHASE, ((Number) ghostSpeed.get("chase")).doubleValue());
         ghostSpeeds.put(GhostMode.SCATTER, ((Number) ghostSpeed.get("scatter")).doubleValue());
+        ghostSpeeds.put(GhostMode.FRIGHTENED, ((Number) ghostSpeed.get("frightened")).doubleValue()); // Add this line
         return ghostSpeeds;
     }
 }

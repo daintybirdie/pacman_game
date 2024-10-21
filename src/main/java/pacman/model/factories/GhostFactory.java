@@ -25,6 +25,8 @@ public class GhostFactory implements RenderableFactory {
     private static final Image INKY_IMAGE = new Image("maze/ghosts/inky.png");
     private static final Image CLYDE_IMAGE = new Image("maze/ghosts/clyde.png");
     private static final Image PINKY_IMAGE = new Image("maze/ghosts/pinky.png");
+    private static final Image FRIGHTENED_IMAGE = new Image("maze/ghosts/frightened.png");
+
     // The renderableTyper variable will be used to dynamically create thr unique ghost type
     private char renderableType;
     /*
@@ -88,7 +90,9 @@ public class GhostFactory implements RenderableFactory {
                     kinematicState,
                     GhostMode.SCATTER,
                     targetCorner,
-                    renderableType // the renderableType character is the ghost's name for ID purposes
+                    renderableType, // the renderableType character is the ghost's name for ID purposes,
+                    IMAGES.get(renderableType),
+                    FRIGHTENED_IMAGE
             );
 
             /*

@@ -34,6 +34,22 @@ public class Vector2D {
         return new Vector2D(this.x + v.getX(), this.y + v.getY());
     }
 
+    public Vector2D subtract(Vector2D v) {
+        return new Vector2D(this.x - v.getX(), this.y - v.getY());
+    }
+
+    public Vector2D scale(double factor) {
+        return new Vector2D(this.x * factor, this.y * factor);
+    }
+
+    public Vector2D normalize() {
+        double length = Math.sqrt(x * x + y * y);
+        if (length == 0) {
+            return ZERO; // Return zero vector if length is zero
+        }
+        return new Vector2D(x / length, y / length);
+    }
+
     public boolean isLeftOf(double x) {
         return this.x < x;
     }

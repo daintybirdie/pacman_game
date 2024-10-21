@@ -7,6 +7,7 @@ import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.dynamic.physics.BoundingBoxImpl;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.staticentity.collectable.Pellet;
+import pacman.model.entity.staticentity.collectable.PowerPellet;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,32 +37,29 @@ public class PelletFactory implements RenderableFactory {
 
 
     @Override
-    public Renderable createRenderable(
-            Vector2D position
-    )
-    {
+    public Renderable createRenderable(Vector2D position) {
         try {
-
-            int scaling = PELLETMAP.get(renderableType);
+            int scaling = PELLETMAP.get(renderableType); // Get the scaling factor for the pellet
 
             BoundingBox boundingBox = new BoundingBoxImpl(
                     position,
-                    PELLET_IMAGE.getHeight()*scaling,
-                    PELLET_IMAGE.getWidth() *scaling
+                    PELLET_IMAGE.getHeight() * scaling,
+                    PELLET_IMAGE.getWidth() * scaling
             );
 
-            return new Pellet(
-                    boundingBox,
-                    layer,
-                    PELLET_IMAGE,
-                    NUM_POINTS
-            );
-
-        }
-
-        catch (Exception e) {
-            throw new ConfigurationParseException(
-                    String.format("Invalid pellet configuration | %s", e));
+            // Check if the renderableType is 'z' for PowerPellet
+            if (renderableType == 'z') {
+                // Return a PowerPellet if renderableType is 'z'
+                return new PowerPellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS);
+            } else if (renderableType == '7') {
+                // Return a regular Pellet if renderableType is '7'
+                return new Pellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS);
+            } else {
+                // Handle unknown types if necessary
+                throw new ConfigurationParseException("Unknown pellet type");
+            }
+        } catch (Exception e) {
+            throw new ConfigurationParseException(String.format("Invalid pellet configuration | %s", e));
         }
     }
 }

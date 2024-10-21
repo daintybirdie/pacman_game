@@ -15,11 +15,12 @@ public class ClydeChaseBehaviour implements GhostBehaviour {
     private GhostImpl clyde;
     @Override
     public void chasePostition(List<Ghost> ghosts) {
-        ghosts.forEach(ghost -> {
+        for (Ghost ghost : ghosts) {
             if (ghost.getName() == 'c') {
                 clyde = (GhostImpl) ghost;
+                break;
             }
-        });
+        }
         Vector2D pacmanPosition = clyde.getTargetLocation();
         double xP = pacmanPosition.getX();
         double yP = pacmanPosition.getY();
