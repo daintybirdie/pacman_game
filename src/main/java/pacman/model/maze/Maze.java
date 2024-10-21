@@ -3,9 +3,11 @@ package pacman.model.maze;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.physics.Direction;
+import pacman.model.factories.RenderableFactory;
 import pacman.model.factories.RenderableType;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 
 /**
@@ -21,11 +23,21 @@ public class Maze {
     private Renderable pacman;
     private int numLives;
 
+    private Map<Character, Consumer<Renderable>> renderableActions = new HashMap<>();
+
+
     public Maze() {
         this.renderables = new ArrayList<>();
         this.ghosts = new ArrayList<>();
         this.pellets = new ArrayList<>();
         this.isWall = new HashMap<>();
+        renderableActions.put(RenderableType.PACMAN, renderable -> this.pacman = renderable);
+        renderableActions.put(RenderableType.BLINKY, this.ghosts::add);
+        renderableActions.put(RenderableType.INKY, this.ghosts::add);
+        renderableActions.put(RenderableType.PINKY, this.ghosts::add);
+        renderableActions.put(RenderableType.CLYDE, this.ghosts::add);
+        renderableActions.put(RenderableType.PELLET, this.pellets::add);
+        renderableActions.put(RenderableType.POWER_PELLET, this.pellets::add);
     }
 
     private static String formatCoordinates(int x, int y) {
@@ -56,30 +68,25 @@ public class Maze {
      * @param x              grid X position
      * @param y              grid Y position
      */
+    // I used a map, that used the Consumer interface to add all the types.
+    // This is because by adding by having the if statement chunks, it made the code harder to maintain
     public void addRenderable(Renderable renderable, char renderableType, int x, int y) {
         if (renderable != null) {
-            if (renderableType == RenderableType.PACMAN) {
-                this.pacman = renderable;
-            } else if (renderableType == RenderableType.BLINKY) {
-                this.ghosts.add(renderable);
-            }
-            else if (renderableType == RenderableType.INKY) {
-                this.ghosts.add(renderable);
-            }
-            else if (renderableType == RenderableType.PINKY) {
-                this.ghosts.add(renderable);
-            }
-            else if (renderableType == RenderableType.CLYDE) {
-                this.ghosts.add(renderable);
-            }else if (renderableType == RenderableType.PELLET) {
-                this.pellets.add(renderable);
+            // Get the action associated with the renderable type using the character directly
+            Consumer<Renderable> action = renderableActions.get(renderableType);
+
+            if (action != null) {
+                action.accept(renderable); // Execute the action
             } else {
+                // handling the cases where the type is not recognised- made to be a wall
                 this.isWall.put(formatCoordinates(x, y), true);
             }
 
+            // Add the renderable to the general list
             this.renderables.add(renderable);
         }
     }
+
 
     public List<Renderable> getRenderables() {
         return renderables;

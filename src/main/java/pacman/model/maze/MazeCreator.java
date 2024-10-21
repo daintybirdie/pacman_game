@@ -38,12 +38,21 @@ public class MazeCreator {
 
                 String line = scanner.nextLine();
                 char[] row = line.toCharArray();
+                // moved variable declaration here for ease of understanding
+                Vector2D position;
+                char renderableType;
+                Renderable renderable;
 
                 for (int x = 0; x < row.length; x++) {
-                    Vector2D position = new Vector2D(x * RESIZING_FACTOR, y * RESIZING_FACTOR);
+                    position = new Vector2D(x * RESIZING_FACTOR, y * RESIZING_FACTOR);
 
-                    char renderableType = row[x];
-                    Renderable renderable = renderableFactoryRegistry.createRenderable(
+                    renderableType = row[x];
+
+                    if (renderableType == 'z') {
+                        position = new Vector2D(position.getX() -8, position.getY() - 8);
+                    }
+
+                    renderable = renderableFactoryRegistry.createRenderable(
                             renderableType, position
                     );
 

@@ -16,4 +16,5 @@ public interface RenderableType {
     char PINKY = 's';
     char INKY = 'i';
     char CLYDE = 'c';
+    char POWER_PELLET = 'z';
 }
