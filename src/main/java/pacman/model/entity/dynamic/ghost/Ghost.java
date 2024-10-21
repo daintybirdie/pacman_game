@@ -25,13 +25,25 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
      */
     void setGhostMode(GhostMode ghostMode);
 
+    /**
+     * @param vector2D sets target location based on Vector2D position given
+     */
     void setTargetLocation(Vector2D vector2D);
 
+    /**
+     * @return Ghostbehaviour, which allows for dynamically setting target position based on unique ghost behaviour
+     */
     GhostBehaviour getGhostBehaviour();
 
-    void setTargetCorner(Vector2D vector2D);
-
+    /**
+     *
+     * @param ghostBehaviour sets the ghost behaviour during intialisation (for CHASE MODE)- updated in tick()
+     */
     void setGhostBehaviour(GhostBehaviour ghostBehaviour);
 
+    /**
+     *
+     * @return character- the name of the ghost is the character allocated on map.txt
+     */
     char getName();
 }

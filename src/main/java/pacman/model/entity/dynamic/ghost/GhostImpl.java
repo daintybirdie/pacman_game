@@ -95,17 +95,12 @@ public class GhostImpl implements Ghost {
         }
     }
 
-    // This was a complete copy of setPosition. Changed to set player position when in chase mode.
+    // Added this message to ensure we can change the target's position based on GhostMode
     @Override
     public void setTargetLocation(Vector2D vector2D) {
         if (this.ghostMode == GhostMode.CHASE) {
             this.playerPosition = vector2D;
         }
-    }
-
-    @Override
-    public void setTargetCorner(Vector2D vector2D) {
-        this.targetCorner = targetCorner;
     }
 
     public Vector2D getTargetLocation() {
@@ -119,10 +114,6 @@ public class GhostImpl implements Ghost {
         return name;
     }
 
-
-    public void setPlayerPosition(Vector2D position) {
-        this.playerPosition = position;
-    }
 
     private Direction selectDirection(Set<Direction> possibleDirections) {
         if (possibleDirections.isEmpty()) {

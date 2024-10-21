@@ -10,7 +10,7 @@ public class BlinkyChaseBehaviour implements GhostBehaviour {
 
     @Override
     public void chasePostition(List<Ghost> ghosts) {
-        //default behaviour
+        //no specialised behaviour for blinky. So its target position
     }
 
 }

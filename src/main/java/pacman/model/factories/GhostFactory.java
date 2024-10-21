@@ -27,6 +27,13 @@ public class GhostFactory implements RenderableFactory {
     private static final Image PINKY_IMAGE = new Image("maze/ghosts/pinky.png");
     // The renderableTyper variable will be used to dynamically create thr unique ghost type
     private char renderableType;
+    /*
+    These variables are used to dynamically allocate the ghost, and assign its behaviour + corner
+    These variables will be declared here, but value assigned in createRendeable.
+     */
+    private GhostImpl ghost;
+    private Vector2D targetCorner;
+    private GhostBehaviour chaseBehaviour;
     // will hold the specific image a ghost instance the map creates a mapping between the character in map.txt and associated image loaded
     private final Image image;
     private static Map<Character, Image> IMAGES = new HashMap<>();
@@ -64,15 +71,10 @@ public class GhostFactory implements RenderableFactory {
                     .setPosition(position)
                     .build();
 
-            GhostImpl ghost;
-            Vector2D targetCorner;
-            GhostBehaviour chaseBehaviour;
-
-            // Retrieve the behaviour map based on the renderableType
+            // Retrieve the inner map from GHOSTMAP, on the renderableType
             Map<GhostBehaviour, Vector2D> behaviourMap = GHOSTMAP.get(renderableType);
 
             if (behaviourMap != null && !behaviourMap.isEmpty()) {
-                // Get the first entry (assuming only one behavior per key)
                 Map.Entry<GhostBehaviour, Vector2D> entry = behaviourMap.entrySet().iterator().next();
                 chaseBehaviour = entry.getKey();
                 targetCorner = entry.getValue();
