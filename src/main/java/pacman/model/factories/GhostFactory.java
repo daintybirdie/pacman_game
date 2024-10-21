@@ -89,6 +89,10 @@ public class GhostFactory implements RenderableFactory {
                     renderableType // the renderableType character is the ghost's name for ID purposes
             );
 
+            /*
+            - here we initialise the unique ghost behaviour for each ghost type.
+            - logic for updating the target position based on the ghost's unique behaviour is done in LevelImpl's tick()
+             */
             ghost.setGhostBehaviour(chaseBehaviour);
 
             return ghost;
