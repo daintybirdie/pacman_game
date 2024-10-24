@@ -14,7 +14,7 @@ public class ClydeChaseBehaviour implements GhostBehaviour {
     private static final double BOTTOM_Y_POSITION_OF_MAP =  16 * 34;
     private GhostImpl clyde;
     @Override
-    public void chasePostition(List<Ghost> ghosts) {
+    public void chasePosition(List<Ghost> ghosts) {
         for (Ghost ghost : ghosts) {
             if (ghost.getName() == 'c') {
                 clyde = (GhostImpl) ghost;

@@ -143,7 +143,6 @@ public class Maze {
             possibleDirections.add(dynamicEntity.getDirection());
             possibleDirections.add(dynamicEntity.getDirection().opposite());
         }
-
         dynamicEntity.setPossibleDirections(possibleDirections);
     }
 

@@ -9,8 +9,8 @@ import java.util.List;
 public class BlinkyChaseBehaviour implements GhostBehaviour {
 
     @Override
-    public void chasePostition(List<Ghost> ghosts) {
-        //no specialised behaviour for blinky. So its target position
+    public void chasePosition(List<Ghost> ghosts) {
+        //no specialised behaviour for blinky.
     }
 
 }

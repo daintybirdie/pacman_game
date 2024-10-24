@@ -6,5 +6,5 @@ import pacman.model.entity.dynamic.ghost.GhostImpl;
 import java.util.List;
 
 public interface GhostBehaviour {
-    void chasePostition(List<Ghost> ghosts);
+    void chasePosition(List<Ghost> ghosts);
 }

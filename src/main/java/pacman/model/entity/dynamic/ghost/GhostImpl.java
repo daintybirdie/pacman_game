@@ -42,6 +42,8 @@ public class GhostImpl implements Ghost {
 
     private static final double SOME_DISTANCE = 50;
 
+    //frightened tick
+    private int tickCountFrightened = 0;
 
     public GhostImpl(Image image, BoundingBox boundingBox, KinematicState kinematicState, GhostMode ghostMode, Vector2D targetCorner, char name,
                      Image normalImage, Image frightenedImage) {
@@ -60,6 +62,17 @@ public class GhostImpl implements Ghost {
         this.currentState = normalState; // Start in normal state
     }
 
+    public void incrementCount() {
+        tickCountFrightened++;
+    }
+
+    public void resetCount() {
+        tickCountFrightened = 0;
+    }
+
+    public int getCount() {
+        return tickCountFrightened;
+    }
     public void setCurrentImage(Image image) {
         this.image = image; // This will update the image shown for the ghost
     }
@@ -74,16 +87,24 @@ public class GhostImpl implements Ghost {
 
     // Method to activate frightened mode
     public void activateFrightenedMode() {
-        currentState.deactivate(this); // Deactivate current state
-        currentState = frightenedState; // Switch to frightened state
-        currentState.activate(this); // Activate new state
+        if (!(currentState instanceof FrightenedState)) { // Only activate if not already in FRIGHTENED state
+            currentState = frightenedState;
+            currentState.activate(this);
+        }
+    }
+
+
+    @Override
+    public GhostState getCurrentState() {
+        return  currentState;
     }
 
     // Method to deactivate frightened mode
     public void deactivateFrightenedMode() {
-        currentState.deactivate(this); // Deactivate current state
-        currentState = normalState; // Switch to normal state
-        currentState.activate(this); // Activate new state
+        if ((currentState instanceof FrightenedState)) {
+            currentState.deactivate(this);
+            currentState = normalState;
+    }
     }
 
 
@@ -211,16 +232,12 @@ public class GhostImpl implements Ghost {
     public void setGhostMode(GhostMode ghostMode) {
         this.ghostMode = ghostMode;
         this.kinematicState.setSpeed(speeds.get(ghostMode));
-        // Ensure direction is switched
         this.currentDirectionCount = minimumDirectionCount;
-
-        // Activate frightened mode if necessary
         if (ghostMode == GhostMode.FRIGHTENED) {
             activateFrightenedMode();
-        } else {
-            deactivateFrightenedMode();
         }
     }
+
 
     @Override
     public boolean collidesWith(Renderable renderable) {
@@ -276,6 +293,11 @@ public class GhostImpl implements Ghost {
 
     @Override
     public void reset() {
+        // ensure ghost state is normal
+        if (currentState instanceof FrightenedState) {
+            this.deactivateFrightenedMode();
+            currentState = normalState;
+        }
         // return ghost to starting position
         this.kinematicState = new KinematicStateImpl.KinematicStateBuilder()
                 .setPosition(startingPosition)
@@ -283,6 +305,11 @@ public class GhostImpl implements Ghost {
         this.boundingBox.setTopLeft(startingPosition);
         this.ghostMode = GhostMode.SCATTER;
         this.currentDirectionCount = minimumDirectionCount;
+    }
+
+    @Override
+    public GhostMode getGhostMode() {
+        return this.ghostMode;
     }
 
     @Override

@@ -5,6 +5,7 @@ import pacman.ConfigurationParseException;
 import pacman.model.engine.observer.GameState;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.DynamicEntity;
+import pacman.model.entity.dynamic.ghost.FrightenedState;
 import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostImpl;
 import pacman.model.entity.dynamic.ghost.GhostMode;
@@ -42,6 +43,10 @@ public class LevelImpl implements Level {
     private GameState gameState;
     private List<Renderable> collectables;
     private GhostMode currentGhostMode;
+    private Map<GhostMode, Double> ghostSpeeds;
+
+    // track how many ghosts eaten in a single frightened state:
+    private int ghostEaten = 0;
 
     public LevelImpl(JSONObject levelConfiguration,
                      Maze maze) {
@@ -73,7 +78,7 @@ public class LevelImpl implements Level {
         this.ghosts = maze.getGhosts().stream()
                 .map(element -> (Ghost) element)
                 .collect(Collectors.toList());
-        Map<GhostMode, Double> ghostSpeeds = levelConfigurationReader.getGhostSpeeds();
+        ghostSpeeds = levelConfigurationReader.getGhostSpeeds();
 
         for (Ghost ghost : this.ghosts) {
             player.registerObserver(ghost);
@@ -83,7 +88,6 @@ public class LevelImpl implements Level {
         this.modeLengths = levelConfigurationReader.getGhostModeLengths();
         // Set up collectables
         this.collectables = new ArrayList<>(maze.getPellets());
-
     }
 
     @Override
@@ -101,76 +105,113 @@ public class LevelImpl implements Level {
                 Collectors.toList());
     }
 
+
+
     @Override
     public void tick() {
         if (this.gameState != GameState.IN_PROGRESS) {
-
             if (tickCount >= START_LEVEL_TIME) {
                 setGameState(GameState.IN_PROGRESS);
                 tickCount = 0;
             }
-
         } else {
-
+            // Check for ghost mode change based on duration
             if (tickCount == modeLengths.get(currentGhostMode)) {
-
-                // update ghost mode
                 this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
-                for (Ghost ghost : this.ghosts) {
-                    ghost.setGhostMode(this.currentGhostMode);
-                }
 
+                for (Ghost ghost : this.ghosts) {
+                    if (ghost.getGhostMode() != GhostMode.FRIGHTENED) {
+                        ghost.setGhostMode(currentGhostMode);
+                    } else {
+                        // In FRIGHTENED mode, check duration
+                        ghost.incrementCount();
+                        // Check if the FRIGHTENED mode duration has expired
+                        if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)*2) {
+                            ghost.deactivateFrightenedMode();
+                            ghostEaten = 0;
+                            ghost.setGhostMode(GhostMode.SCATTER);
+                        }
+                    }
+                }
                 tickCount = 0;
             }
 
+            // Handle image swapping for Pacman
             if (tickCount % Pacman.PACMAN_IMAGE_SWAP_TICK_COUNT == 0) {
                 this.player.switchImage();
             }
 
-            // Update the dynamic entities
+            // Update dynamic entities
             List<DynamicEntity> dynamicEntities = getDynamicEntities();
-
             for (DynamicEntity dynamicEntity : dynamicEntities) {
-
-                /*
-                 - for each ghost, we obtain the current ghost behaviour if it is in CHASE mode.
-                 - Then we set the chase position according to the unique ghost behaviour of each ghost.
-                 */
-                ghosts.forEach(ghost -> {
-                    if (this.currentGhostMode == GhostMode.CHASE) {
-                        ghost.getGhostBehaviour().chasePostition(ghosts);
-                    }
-                });
                 maze.updatePossibleDirections(dynamicEntity);
-                    dynamicEntity.update();
-
+                dynamicEntity.update();
             }
 
-            for (int i = 0; i < dynamicEntities.size(); ++i) {
-                DynamicEntity dynamicEntityA = dynamicEntities.get(i);
 
-                // handle collisions between dynamic entities
-                for (int j = i + 1; j < dynamicEntities.size(); ++j) {
-                    DynamicEntity dynamicEntityB = dynamicEntities.get(j);
-
-                    if (dynamicEntityA.collidesWith(dynamicEntityB) ||
-                            dynamicEntityB.collidesWith(dynamicEntityA)) {
-                        dynamicEntityA.collideWith(this, dynamicEntityB);
-                        dynamicEntityB.collideWith(this, dynamicEntityA);
-                    }
-                }
-
-                // handle collisions between dynamic entities and static entities
-                for (StaticEntity staticEntity : getStaticEntities()) {
-                    if (dynamicEntityA.collidesWith(staticEntity)) {
-                        dynamicEntityA.collideWith(this, staticEntity);
-                        PhysicsEngine.resolveCollision(dynamicEntityA, staticEntity);
+            // Handle collisions with ghosts
+            for (DynamicEntity dynamicEntity : dynamicEntities) {
+                if (dynamicEntity instanceof Pacman) {
+                    for (DynamicEntity other : dynamicEntities) {
+                        if (other instanceof Ghost && dynamicEntity.collidesWith(other)) {
+                            handleGhostCollision((Ghost) other, (Pacman) dynamicEntity);
+                        }
                     }
                 }
             }
+
+            // Handle collisions with static entities
+            handleCollisionsWithStaticEntities(dynamicEntities);
         }
 
         tickCount++;
+    }
+
+    private void handleCollisionsWithStaticEntities(List<DynamicEntity> dynamicEntities) {
+        for (DynamicEntity dynamicEntity : dynamicEntities) {
+            // Check for collisions with static entities
+            for (StaticEntity staticEntity : getStaticEntities()) {
+                if (dynamicEntity.collidesWith(staticEntity)) {
+                    dynamicEntity.collideWith(this, staticEntity);
+                    PhysicsEngine.resolveCollision(dynamicEntity, staticEntity);
+                }
+            }
+        }
+    }
+
+
+    private void handleCollisions(List<DynamicEntity> dynamicEntities) {
+        for (int i = 0; i < dynamicEntities.size(); ++i) {
+            DynamicEntity dynamicEntityA = dynamicEntities.get(i);
+
+            // handle collisions between dynamic entities
+            for (int j = i + 1; j < dynamicEntities.size(); ++j) {
+                DynamicEntity dynamicEntityB = dynamicEntities.get(j);
+
+                if (dynamicEntityA.collidesWith(dynamicEntityB) ||
+                        dynamicEntityB.collidesWith(dynamicEntityA)) {
+                    dynamicEntityA.collideWith(this, dynamicEntityB);
+                    dynamicEntityB.collideWith(this, dynamicEntityA);
+                }
+
+            }
+        }
+    }
+
+    // Method to handle the ghost reset upon collision with Pacman
+    private void handleGhostCollision(Ghost ghost, Pacman pacman) {
+        if (ghost.getGhostMode() == GhostMode.FRIGHTENED) {
+            ghostEaten++;
+            ghost.deactivateFrightenedMode();
+            ghost.reset(); // Reset only this specific ghost
+            ghost.setGhostMode(GhostMode.SCATTER);
+            this.points = 200 * ghostEaten; // Award points for eating the ghost
+            notifyObserversWithScoreChange(points);
+        } else {
+            // If the ghost is NOT in FRIGHTENED mode, handle collisions
+            handleCollisions(getDynamicEntities());
+            ghosts.forEach(Renderable::reset);
+        }
     }
 
     @Override
@@ -186,18 +227,18 @@ public class LevelImpl implements Level {
     @Override
     public void collect(Collectable collectable) {
         Pellet pellet = (Pellet) collectable;
-        this.points += pellet.getPoints();
+        this.points = pellet.getPoints();
+        notifyObserversWithScoreChange(points);
 
         // Check if it's a PowerPellet to activate frightened mode
         if (collectable instanceof PowerPellet) {
-            // Activate frightened mode for all ghosts
             for (Ghost ghost : ghosts) {
-                if (ghost instanceof GhostImpl) { // Ensure the ghost is of type GhostImpl
-                    ((GhostImpl) ghost).activateFrightenedMode();
-                }
+                ghost.setGhostMode(GhostMode.FRIGHTENED);
+                ghost.resetCount();
             }
         }
     }
+
 
 
 

@@ -46,4 +46,14 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
      * @return character- the name of the ghost is the character allocated on map.txt
      */
     char getName();
+
+    void activateFrightenedMode();
+
+    void deactivateFrightenedMode();
+
+    GhostState getCurrentState();
+    GhostMode getGhostMode();
+    void resetCount();
+    void incrementCount();
+    int getCount();
 }

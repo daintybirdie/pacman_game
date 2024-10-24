@@ -14,7 +14,7 @@ public class InkyChaseBehaviour implements GhostBehaviour {
     private GhostImpl blinky;
     private GhostImpl inky;
     @Override
-    public void chasePostition(List<Ghost> ghosts) {
+    public void chasePosition(List<Ghost> ghosts) {
         ghosts.forEach(ghost -> {
             if (ghost.getName() == 'b') {
                 blinky = (GhostImpl) ghost;

@@ -14,7 +14,7 @@ public class PinkyChaseBehaviour implements GhostBehaviour {
     private static final double TILE_SIZE = MazeCreator.RESIZING_FACTOR;
     private GhostImpl pinky;
     @Override
-    public void chasePostition(List<Ghost> ghosts) {
+    public void chasePosition(List<Ghost> ghosts) {
         for (Ghost ghost :ghosts)
             if (ghost.getName() == 's') {
                 pinky = (GhostImpl) ghost;
