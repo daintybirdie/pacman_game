@@ -1,5 +1,8 @@
 package pacman.model.level;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import org.json.simple.JSONObject;
 import pacman.ConfigurationParseException;
 import pacman.model.engine.observer.GameState;
@@ -156,7 +159,7 @@ public class LevelImpl implements Level {
                 if (dynamicEntity instanceof Pacman) {
                     for (DynamicEntity other : dynamicEntities) {
                         if (other instanceof Ghost && dynamicEntity.collidesWith(other)) {
-                            handleGhostCollision((Ghost) other, (Pacman) dynamicEntity);
+                            handleGhostCollision((Ghost) other);
                         }
                     }
                 }
@@ -202,14 +205,19 @@ public class LevelImpl implements Level {
     }
 
     // Method to handle the ghost reset upon collision with Pacman
-    private void handleGhostCollision(Ghost ghost, Pacman pacman) {
+    private void handleGhostCollision(Ghost ghost) {
         if (ghost.getGhostMode() == GhostMode.FRIGHTENED) {
             ghostEaten++;
             this.points = 200 * ghostEaten; // Award points for eating the ghost
             notifyObserversWithScoreChange(points);
             ghost.deactivateFrightenedMode();
             ghost.reset(); // Reset only this specific ghost
-            ghost.setGhostMode(GhostMode.SCATTER);
+            ghost.setPaused(true); // Pause movement
+            Timeline pauseTimeline = new Timeline(new KeyFrame(
+                    Duration.seconds(1),
+                    e -> ghost.setPaused(false) // Resume movement after 1 second
+            ));
+            pauseTimeline.play();
         } else {
             // If the ghost is NOT in FRIGHTENED mode, handle collisions
             handleCollisions(getDynamicEntities());

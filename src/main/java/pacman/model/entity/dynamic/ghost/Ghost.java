@@ -56,4 +56,7 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
     void resetCount();
     void incrementCount();
     int getCount();
+
+    void setPaused(boolean b);
+    boolean isPaused();
 }

@@ -44,6 +44,7 @@ public class GhostImpl implements Ghost {
 
     //frightened tick
     private int tickCountFrightened = 0;
+    private boolean isPaused = false;
 
     public GhostImpl(Image image, BoundingBox boundingBox, KinematicState kinematicState, GhostMode ghostMode, Vector2D targetCorner, char name,
                      Image normalImage, Image frightenedImage) {
@@ -118,12 +119,23 @@ public class GhostImpl implements Ghost {
         return image;
     }
 
+    @Override
+    public void setPaused(boolean paused) {
+        this.isPaused = paused;
+    }
+
+    @Override
+    public boolean isPaused() {
+        return isPaused;
+    }
 
     @Override
     public void update() {
-        this.updateDirection();
-        this.kinematicState.update();
-        this.boundingBox.setTopLeft(this.kinematicState.getPosition());
+        if (!isPaused()) {
+            this.updateDirection();
+            this.kinematicState.update();
+            this.boundingBox.setTopLeft(this.kinematicState.getPosition());
+        }
     }
 
     @Override
