@@ -202,11 +202,11 @@ public class LevelImpl implements Level {
     private void handleGhostCollision(Ghost ghost, Pacman pacman) {
         if (ghost.getGhostMode() == GhostMode.FRIGHTENED) {
             ghostEaten++;
+            this.points = 200 * ghostEaten; // Award points for eating the ghost
+            notifyObserversWithScoreChange(points);
             ghost.deactivateFrightenedMode();
             ghost.reset(); // Reset only this specific ghost
             ghost.setGhostMode(GhostMode.SCATTER);
-            this.points = 200 * ghostEaten; // Award points for eating the ghost
-            notifyObserversWithScoreChange(points);
         } else {
             // If the ghost is NOT in FRIGHTENED mode, handle collisions
             handleCollisions(getDynamicEntities());
@@ -227,6 +227,7 @@ public class LevelImpl implements Level {
     @Override
     public void collect(Collectable collectable) {
         Pellet pellet = (Pellet) collectable;
+        this.collectables.remove(collectable);
         this.points = pellet.getPoints();
         notifyObserversWithScoreChange(points);
 
@@ -238,8 +239,6 @@ public class LevelImpl implements Level {
             }
         }
     }
-
-
 
 
 
