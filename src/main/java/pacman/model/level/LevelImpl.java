@@ -117,26 +117,37 @@ public class LevelImpl implements Level {
                 setGameState(GameState.IN_PROGRESS);
                 tickCount = 0;
             }
-        } else {
-            // Check for ghost mode change based on duration
-            if (tickCount == modeLengths.get(currentGhostMode)) {
-                this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
-
-                for (Ghost ghost : this.ghosts) {
-                    if (ghost.getGhostMode() != GhostMode.FRIGHTENED) {
-                        ghost.setGhostMode(currentGhostMode);
-                    } else {
+        }
+        else {
+            System.out.println(tickCount);
+            System.out.println(currentGhostMode);
+            System.out.println(modeLengths.get(currentGhostMode)*30);
+            if (currentGhostMode == GhostMode.FRIGHTENED) {
+                for (Ghost ghost : ghosts) {
+                    ghost.incrementCount();
+                }
+            }
+            if (tickCount >= modeLengths.get(currentGhostMode)*30) {
+                if (currentGhostMode != GhostMode.FRIGHTENED) {
+                    // Transition to the next ghost mode
+                    this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
+                    for (Ghost ghost : this.ghosts) {
+                        ghost.setGhostMode(this.currentGhostMode);
+                    }
+                } else {
+                    for (Ghost ghost : this.ghosts) {
                         // In FRIGHTENED mode, check duration
-                        ghost.incrementCount();
                         // Check if the FRIGHTENED mode duration has expired
-                        if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)) {
+                        if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)*30) {
                             ghost.deactivateFrightenedMode();
-                            ghostEaten = 0;
                             ghost.setGhostMode(GhostMode.SCATTER);
+                            ghostEaten = 0; // Reset the count of ghosts eaten
                         }
                     }
+                    currentGhostMode = GhostMode.SCATTER;
                 }
-                tickCount = 0;
+
+                tickCount = 0; // Reset tick count after processing
             }
 
             // Handle image swapping for Pacman
@@ -199,7 +210,7 @@ public class LevelImpl implements Level {
                     dynamicEntityB.collideWith(this, dynamicEntityA);
                 }
             }
-         }
+        }
     }
 
     // Method to handle the ghost reset upon collision with Pacman
@@ -209,11 +220,17 @@ public class LevelImpl implements Level {
             this.points = 200 * ghostEaten; // Award points for eating the ghost
             notifyObserversWithScoreChange(points);
             ghost.deactivateFrightenedMode();
+            currentGhostMode = GhostMode.SCATTER;
+//            ghost.setCurrentImage(ghost.getNormalImage());
             ghost.reset(); // Reset only this specific ghost
             ghost.setPaused(true); // Pause movement
+            // Create a Timeline to resume movement after 1 second
             Timeline pauseTimeline = new Timeline(new KeyFrame(
                     Duration.seconds(1),
-                    e -> ghost.setPaused(false) // Resume movement after 1 second
+                    e -> {
+                        ghost.setPaused(false); // Resume movement after 1 second
+                        ghost.setGhostMode(GhostMode.SCATTER); // Ensure it goes back to SCATTER mode after pause
+                    }
             ));
             pauseTimeline.play();
         } else {
@@ -222,6 +239,7 @@ public class LevelImpl implements Level {
             ghosts.forEach(Renderable::reset);
         }
     }
+
 
     @Override
     public boolean isPlayer(Renderable renderable) {
@@ -250,7 +268,9 @@ public class LevelImpl implements Level {
             for (Ghost ghost : ghosts) {
                 ghost.setGhostMode(GhostMode.FRIGHTENED);
                 ghost.resetCount();
+                tickCount = 0;
             }
+            currentGhostMode = GhostMode.FRIGHTENED;
         }
     }
 
