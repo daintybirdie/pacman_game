@@ -17,7 +17,8 @@ import java.util.Map;
  */
 public class PelletFactory implements RenderableFactory {
     private static final Image PELLET_IMAGE = new Image("maze/pellet.png");
-    private static final int NUM_POINTS = 100;
+    private static final int NUM_POINTS_7 = 10;
+    private static final int NUM_POINTS_Z = 50;
     private final Renderable.Layer layer = Renderable.Layer.BACKGROUND;
     private char renderableType;
     private static Map<Character, Integer> PELLETMAP = new HashMap<>();
@@ -50,10 +51,10 @@ public class PelletFactory implements RenderableFactory {
             // Check if the renderableType is 'z' for PowerPellet
             if (renderableType == 'z') {
                 // Return a PowerPellet if renderableType is 'z'
-                return new PowerPellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS);
+                return new PowerPellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_Z);
             } else if (renderableType == '7') {
                 // Return a regular Pellet if renderableType is '7'
-                return new Pellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS);
+                return new Pellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_7);
             } else {
                 // Handle unknown types if necessary
                 throw new ConfigurationParseException("Unknown pellet type");

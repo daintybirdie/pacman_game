@@ -197,10 +197,6 @@ public class GhostImpl implements Ghost {
         Vector2D currentPosition = this.kinematicState.getPosition(); // Get current position of the ghost
         Vector2D directionAwayFromPlayer = this.playerPosition.subtract(currentPosition).normalize(); // Normalize to get a unit vector
         Vector2D awayFromPlayerLocation = currentPosition.add(directionAwayFromPlayer.scale(SOME_DISTANCE)); // Scale by a distance
-
-        // Ensure the new location is valid in the game context (not colliding with walls, etc.)
-        // You may need additional checks to validate the target location within the maze
-
         return awayFromPlayerLocation; // Return the calculated target location
     }
 

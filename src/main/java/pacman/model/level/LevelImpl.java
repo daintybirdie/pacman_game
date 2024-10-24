@@ -129,8 +129,6 @@ public class LevelImpl implements Level {
                         // In FRIGHTENED mode, check duration
                         ghost.incrementCount();
                         // Check if the FRIGHTENED mode duration has expired
-                        System.out.println(ghost.getCount());
-                        System.out.println(modeLengths.get(GhostMode.FRIGHTENED));
                         if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)) {
                             ghost.deactivateFrightenedMode();
                             ghostEaten = 0;
@@ -237,8 +235,13 @@ public class LevelImpl implements Level {
 
     @Override
     public void collect(Collectable collectable) {
-        Pellet pellet = (Pellet) collectable;
+        Pellet pellet;
         this.collectables.remove(collectable);
+        if (collectable instanceof PowerPellet) {
+            pellet = (PowerPellet) collectable;
+        } else {
+            pellet = (Pellet) collectable;
+        }
         this.points = pellet.getPoints();
         notifyObserversWithScoreChange(points);
 
