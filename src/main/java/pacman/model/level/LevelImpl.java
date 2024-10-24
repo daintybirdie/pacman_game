@@ -116,18 +116,22 @@ public class LevelImpl implements Level {
             if (tickCount >= START_LEVEL_TIME) {
                 setGameState(GameState.IN_PROGRESS);
                 tickCount = 0;
+                // Reset ghost states when starting a new level
+                for (Ghost ghost : ghosts) {
+                    ghost.setGhostMode(GhostMode.SCATTER);
+                }
             }
-        }
-        else {
-            System.out.println(tickCount);
-            System.out.println(currentGhostMode);
-            System.out.println(modeLengths.get(currentGhostMode)*30);
+        } else {
+
+            // Increment count for FRIGHTENED mode ghosts
             if (currentGhostMode == GhostMode.FRIGHTENED) {
                 for (Ghost ghost : ghosts) {
                     ghost.incrementCount();
                 }
             }
-            if (tickCount >= modeLengths.get(currentGhostMode)*30) {
+
+            // Check for mode transition based on tick count
+            if (tickCount >= modeLengths.get(currentGhostMode)) {
                 if (currentGhostMode != GhostMode.FRIGHTENED) {
                     // Transition to the next ghost mode
                     this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
@@ -135,16 +139,15 @@ public class LevelImpl implements Level {
                         ghost.setGhostMode(this.currentGhostMode);
                     }
                 } else {
+                    // In FRIGHTENED mode, check duration
                     for (Ghost ghost : this.ghosts) {
-                        // In FRIGHTENED mode, check duration
-                        // Check if the FRIGHTENED mode duration has expired
-                        if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)*30) {
+                        if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)) {
                             ghost.deactivateFrightenedMode();
                             ghost.setGhostMode(GhostMode.SCATTER);
                             ghostEaten = 0; // Reset the count of ghosts eaten
                         }
                     }
-                    currentGhostMode = GhostMode.SCATTER;
+                    currentGhostMode = GhostMode.SCATTER; // Ensure mode is set to SCATTER
                 }
 
                 tickCount = 0; // Reset tick count after processing
@@ -161,7 +164,6 @@ public class LevelImpl implements Level {
                 maze.updatePossibleDirections(dynamicEntity);
                 dynamicEntity.update();
             }
-
 
             // Handle collisions with ghosts
             for (DynamicEntity dynamicEntity : dynamicEntities) {
@@ -180,6 +182,7 @@ public class LevelImpl implements Level {
 
         tickCount++;
     }
+
 
     private void handleCollisionsWithStaticEntities(List<DynamicEntity> dynamicEntities) {
         for (DynamicEntity dynamicEntity : dynamicEntities) {
@@ -220,8 +223,6 @@ public class LevelImpl implements Level {
             this.points = 200 * ghostEaten; // Award points for eating the ghost
             notifyObserversWithScoreChange(points);
             ghost.deactivateFrightenedMode();
-            currentGhostMode = GhostMode.SCATTER;
-//            ghost.setCurrentImage(ghost.getNormalImage());
             ghost.reset(); // Reset only this specific ghost
             ghost.setPaused(true); // Pause movement
             // Create a Timeline to resume movement after 1 second
