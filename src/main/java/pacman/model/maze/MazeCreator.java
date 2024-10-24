@@ -51,6 +51,10 @@ public class MazeCreator {
                     if (renderableType == 'z') {
                         position = new Vector2D(position.getX() -8, position.getY() - 8);
                     }
+                    // had to offset ghosts - collision between pacman + ghosts not detected in some corridors
+                    if (renderableType == 'b'||renderableType == 's'||renderableType == 'i'||renderableType == 'c') {
+                        position = new Vector2D(position.getX() -4, position.getY() - 4);
+                    }
 
                     renderable = renderableFactoryRegistry.createRenderable(
                             renderableType, position

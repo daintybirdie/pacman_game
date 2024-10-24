@@ -126,7 +126,9 @@ public class LevelImpl implements Level {
                         // In FRIGHTENED mode, check duration
                         ghost.incrementCount();
                         // Check if the FRIGHTENED mode duration has expired
-                        if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)*2) {
+                        System.out.println(ghost.getCount());
+                        System.out.println(modeLengths.get(GhostMode.FRIGHTENED));
+                        if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)) {
                             ghost.deactivateFrightenedMode();
                             ghostEaten = 0;
                             ghost.setGhostMode(GhostMode.SCATTER);
@@ -170,10 +172,12 @@ public class LevelImpl implements Level {
     private void handleCollisionsWithStaticEntities(List<DynamicEntity> dynamicEntities) {
         for (DynamicEntity dynamicEntity : dynamicEntities) {
             // Check for collisions with static entities
-            for (StaticEntity staticEntity : getStaticEntities()) {
-                if (dynamicEntity.collidesWith(staticEntity)) {
-                    dynamicEntity.collideWith(this, staticEntity);
-                    PhysicsEngine.resolveCollision(dynamicEntity, staticEntity);
+            if (dynamicEntity instanceof Pacman) {
+                for (StaticEntity staticEntity : getStaticEntities()) {
+                    if (dynamicEntity.collidesWith(staticEntity)) {
+                        dynamicEntity.collideWith(this, staticEntity);
+                        PhysicsEngine.resolveCollision(dynamicEntity, staticEntity);
+                    }
                 }
             }
         }
@@ -193,9 +197,8 @@ public class LevelImpl implements Level {
                     dynamicEntityA.collideWith(this, dynamicEntityB);
                     dynamicEntityB.collideWith(this, dynamicEntityA);
                 }
-
             }
-        }
+         }
     }
 
     // Method to handle the ghost reset upon collision with Pacman
