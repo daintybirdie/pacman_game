@@ -24,5 +24,16 @@ public class PowerPelletDecorator extends PelletDecorator {
         level.setCurrentGhostMode(GhostMode.FRIGHTENED);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj)) return false; // Check if the wrapped collectable is equal
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode(); // Inherit hash code logic
+    }
+
 }
 

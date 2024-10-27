@@ -47,7 +47,7 @@ public class Pellet extends StaticEntityImpl implements Collectable {
 
     @Override
     public boolean isCollectable() {
-        return true;
+        return isCollectable;
     }
 
     @Override

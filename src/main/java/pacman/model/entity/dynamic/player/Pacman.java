@@ -113,12 +113,6 @@ public class Pacman implements Controllable, PlayerPositionSubject {
     @Override
     public void collideWith(Level level, Renderable renderable) {
         if (level.isCollectable(renderable)) {
-            if (renderable instanceof PowerPelletDecorator) {
-                System.out.println("GOING TO COLLIDE WITH DECORATOR CONCRETE");
-            }
-            if (renderable instanceof Pellet) {
-                System.out.println("GOING TO COLLIDE WITH pp");
-            }
             Collectable collectable = (Collectable) renderable;
             level.collect(collectable);
         }

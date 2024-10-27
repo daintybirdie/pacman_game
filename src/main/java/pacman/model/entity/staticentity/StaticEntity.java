@@ -36,6 +36,7 @@ public interface StaticEntity extends Renderable {
 
     @Override
     default void reset() {
+
     }
 
 }
