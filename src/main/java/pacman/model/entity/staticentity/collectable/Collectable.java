@@ -1,6 +1,7 @@
 package pacman.model.entity.staticentity.collectable;
 
 import pacman.model.entity.Renderable;
+import pacman.model.entity.staticentity.collectable.compositepattern.CollectEffect;
 import pacman.model.level.Level;
 
 /**
@@ -11,7 +12,7 @@ public interface Collectable extends Renderable {
     /**
      * Sets collectable to collected
      */
-    void collect(Level level, Collectable collectable);
+    void collect(Level level);
 
     /**
      * Returns whether the collectable is currently collectable
@@ -27,4 +28,6 @@ public interface Collectable extends Renderable {
      * @return number of points earned from collecting collectable
      */
     int getPoints();
+
+    void setCollectEffect(CollectEffect collectEffect);
 }

@@ -8,6 +8,7 @@ import pacman.model.entity.dynamic.physics.BoundingBoxImpl;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.staticentity.collectable.Pellet;
 import pacman.model.entity.staticentity.collectable.PowerPellet;
+import pacman.model.entity.staticentity.collectable.compositepattern.CollectEffect;
 import pacman.model.entity.staticentity.collectable.compositepattern.PelletEffect;
 import pacman.model.entity.staticentity.collectable.compositepattern.PowerPelletEffect;
 
@@ -41,28 +42,30 @@ public class PelletFactory implements RenderableFactory {
 
     @Override
     public Renderable createRenderable(Vector2D position) {
-        try {
-            int scaling = PELLETMAP.get(renderableType); // Get the scaling factor for the pellet
+        int scaling = PELLETMAP.get(renderableType); // Get the scaling factor for the pellet
 
-            BoundingBox boundingBox = new BoundingBoxImpl(
-                    position,
-                    PELLET_IMAGE.getHeight() * scaling,
-                    PELLET_IMAGE.getWidth() * scaling
-            );
+        BoundingBox boundingBox = new BoundingBoxImpl(
+                position,
+                PELLET_IMAGE.getHeight() * scaling,
+                PELLET_IMAGE.getWidth() * scaling
+        );
 
-            // Check if the renderableType is 'z' for PowerPellet
-            if (renderableType == 'z') {
-                // Return a PowerPellet if renderableType is 'z'
-                return new PowerPellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_Z, new PowerPelletEffect());
-            } else if (renderableType == '7') {
-                // Return a regular Pellet if renderableType is '7'
-                return new Pellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_7, new PelletEffect());
-            } else {
-                // Handle unknown types if necessary
-                throw new ConfigurationParseException("Unknown pellet type");
-            }
-        } catch (Exception e) {
-            throw new ConfigurationParseException(String.format("Invalid pellet configuration | %s", e));
+        // Check if the renderableType is 'z' for PowerPellet
+        if (renderableType == 'z') {
+            // Return a PowerPellet if renderableType is 'z'
+            PowerPellet powerPellet = new PowerPellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_Z);
+            CollectEffect pelletEffect = new PowerPelletEffect(powerPellet);
+            powerPellet.setCollectEffect(pelletEffect);
+            return powerPellet;
+        } else if (renderableType == '7') {
+            // Return a regular Pellet if renderableType is '7'
+            Pellet pellet = new Pellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_7);
+            CollectEffect pelletEffect = new PelletEffect(pellet);
+            pellet.setCollectEffect(pelletEffect);
+
+            return pellet;
+        } else {
+            throw new ConfigurationParseException("Unknown pellet type");
         }
     }
 }

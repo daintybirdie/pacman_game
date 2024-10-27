@@ -7,5 +7,5 @@ import pacman.model.level.Level;
 import java.util.List;
 
 public interface CollectEffect {
-     void collect(Level level, Collectable collectable);
+     void collect(Level level);
 }

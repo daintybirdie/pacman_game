@@ -269,7 +269,7 @@ public class LevelImpl implements Level {
     @Override
     public void collect(Collectable collectable) {
       Pellet pellet = (Pellet) collectable;
-      pellet.collect(this, collectable);
+      pellet.collect(this);
     }
 
     @Override

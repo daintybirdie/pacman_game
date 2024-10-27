@@ -6,7 +6,7 @@ import pacman.model.entity.staticentity.collectable.compositepattern.CollectEffe
 
 public class PowerPellet extends Pellet{
 
-    public PowerPellet(BoundingBox boundingBox, Layer layer, Image image, int points, CollectEffect collectEffect) {
-        super(boundingBox, layer, image, points,collectEffect);
+    public PowerPellet(BoundingBox boundingBox, Layer layer, Image image, int points) {
+        super(boundingBox, layer, image, points);
     }
 }

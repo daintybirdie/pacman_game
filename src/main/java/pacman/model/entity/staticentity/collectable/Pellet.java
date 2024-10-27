@@ -15,19 +15,22 @@ public class Pellet extends StaticEntityImpl implements Collectable {
     private boolean isCollectable;
     private CollectEffect collectEffect;
 
-    public Pellet(BoundingBox boundingBox, Layer layer, Image image, int points, CollectEffect collectEffect) {
+    public Pellet(BoundingBox boundingBox, Layer layer, Image image, int points) {
         super(boundingBox, layer, image);
         this.points = points;
         this.isCollectable = true;
-        this.collectEffect = collectEffect;
-
     }
 
     @Override
-    public void collect(Level level, Collectable collectable) {
-        collectEffect.collect(level, collectable);
+    public void collect(Level level) {
+        collectEffect.collect(level);
         this.isCollectable = false;
         setLayer(Layer.INVISIBLE);
+    }
+
+    @Override
+    public void setCollectEffect(CollectEffect collectEffect) {
+        this.collectEffect = collectEffect;
     }
 
     @Override
