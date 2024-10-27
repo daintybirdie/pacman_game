@@ -11,12 +11,12 @@ public class ClydeChaseBehaviour implements GhostChaseBehaviour {
     private static final double TARGET_DISTANCE = 8;
     private static final double TILE_SIZE = MazeCreator.RESIZING_FACTOR;
     private static final double BOTTOM_Y_POSITION_OF_MAP =  16 * 34;
-    private GhostImpl clyde;
+    private Ghost clyde;
     @Override
     public void chasePosition(List<Ghost> ghosts) {
         for (Ghost ghost : ghosts) {
             if (ghost.getName() == 'c') {
-                clyde = (GhostImpl) ghost;
+                clyde = ghost;
                 break;
             }
         }

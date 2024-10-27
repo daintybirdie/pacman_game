@@ -66,5 +66,6 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
     void setCurrentState(GhostState state);
     GhostState getNormalState();
     GhostState getFrightenedState();
+    Vector2D getTargetLocation();
 
 }
