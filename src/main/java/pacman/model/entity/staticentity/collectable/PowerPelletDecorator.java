@@ -1,25 +1,24 @@
-package pacman.model.entity.staticentity.collectable.compositepattern;
+package pacman.model.entity.staticentity.collectable;
 
-import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostMode;
-import pacman.model.entity.staticentity.collectable.Collectable;
-import pacman.model.entity.staticentity.collectable.Pellet;
+import pacman.model.entity.dynamic.physics.BoundingBox;
+import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.level.Level;
 
-public class PowerPelletEffect implements CollectEffect{
-    int points;
-
-    Pellet pellet;
-    public PowerPelletEffect(Pellet pellet) {
+public class PowerPelletDecorator extends PelletDecorator {
+    private Pellet pellet;
+    private final int points = 50;
+    public PowerPelletDecorator(Pellet pellet) {
+        super(pellet);
         this.pellet = pellet;
     }
 
     @Override
     public void collect(Level level) {
         level.getCollectables().remove(pellet);
-        this.points = pellet.getPoints();
-        level.notifyObserversWithScoreChange(points);
+        this.displayPoints = points;
+        level.notifyObserversWithScoreChange(displayPoints);
         for (Ghost ghost : level.getGhosts()) {
             ghost.setGhostMode(GhostMode.FRIGHTENED);
             ghost.setCurrentState(ghost.getNormalState());
@@ -30,3 +29,4 @@ public class PowerPelletEffect implements CollectEffect{
         level.setCurrentGhostMode(GhostMode.FRIGHTENED);
     }
 }
+

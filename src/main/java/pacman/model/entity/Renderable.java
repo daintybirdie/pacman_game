@@ -51,6 +51,10 @@ public interface Renderable {
      */
     void reset();
 
+    default boolean canPassThrough() {
+        return false;
+    };
+
     /**
      * The set of available layers
      */

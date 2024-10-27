@@ -6,11 +6,9 @@ import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.dynamic.physics.BoundingBoxImpl;
 import pacman.model.entity.dynamic.physics.Vector2D;
+import pacman.model.entity.staticentity.collectable.Collectable;
 import pacman.model.entity.staticentity.collectable.Pellet;
-import pacman.model.entity.staticentity.collectable.PowerPellet;
-import pacman.model.entity.staticentity.collectable.compositepattern.CollectEffect;
-import pacman.model.entity.staticentity.collectable.compositepattern.PelletEffect;
-import pacman.model.entity.staticentity.collectable.compositepattern.PowerPelletEffect;
+import pacman.model.entity.staticentity.collectable.PowerPelletDecorator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,17 +51,12 @@ public class PelletFactory implements RenderableFactory {
         // Check if the renderableType is 'z' for PowerPellet
         if (renderableType == 'z') {
             // Return a PowerPellet if renderableType is 'z'
-            PowerPellet powerPellet = new PowerPellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_Z);
-            CollectEffect pelletEffect = new PowerPelletEffect(powerPellet);
-            powerPellet.setCollectEffect(pelletEffect);
-            return powerPellet;
+            Collectable pellet = new Pellet(boundingBox, layer, PELLET_IMAGE);
+            PowerPelletDecorator powerPelletDecorator = new PowerPelletDecorator((Pellet) pellet);
+            return powerPelletDecorator;
         } else if (renderableType == '7') {
-            // Return a regular Pellet if renderableType is '7'
-            Pellet pellet = new Pellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_7);
-            CollectEffect pelletEffect = new PelletEffect(pellet);
-            pellet.setCollectEffect(pelletEffect);
-
-            return pellet;
+            Pellet pellet = new Pellet(boundingBox, layer, PELLET_IMAGE);
+            return new Pellet(boundingBox, layer, PELLET_IMAGE);
         } else {
             throw new ConfigurationParseException("Unknown pellet type");
         }

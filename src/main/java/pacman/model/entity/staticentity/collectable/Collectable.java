@@ -1,7 +1,7 @@
 package pacman.model.entity.staticentity.collectable;
 
 import pacman.model.entity.Renderable;
-import pacman.model.entity.staticentity.collectable.compositepattern.CollectEffect;
+import pacman.model.entity.staticentity.StaticEntity;
 import pacman.model.level.Level;
 
 /**
@@ -29,5 +29,5 @@ public interface Collectable extends Renderable {
      */
     int getPoints();
 
-    void setCollectEffect(CollectEffect collectEffect);
+    boolean canPassThrough();
 }

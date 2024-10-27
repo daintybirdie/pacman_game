@@ -3,7 +3,6 @@ package pacman.model.entity.staticentity.collectable;
 import javafx.scene.image.Image;
 import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.staticentity.StaticEntityImpl;
-import pacman.model.entity.staticentity.collectable.compositepattern.CollectEffect;
 import pacman.model.level.Level;
 
 /**
@@ -11,27 +10,31 @@ import pacman.model.level.Level;
  */
 public class Pellet extends StaticEntityImpl implements Collectable {
 
-    private final int points;
+    private final int points = 10;
+    private int currentPoints;
     private boolean isCollectable;
-    private CollectEffect collectEffect;
+    private Image image;
 
-    public Pellet(BoundingBox boundingBox, Layer layer, Image image, int points) {
+    public Pellet(BoundingBox boundingBox, Layer layer, Image image) {
         super(boundingBox, layer, image);
-        this.points = points;
+        this.image = image;
         this.isCollectable = true;
     }
 
     @Override
     public void collect(Level level) {
-        collectEffect.collect(level);
+        level.getCollectables().remove(this);
+        this.currentPoints = this.getPoints();
+        level.notifyObserversWithScoreChange(currentPoints);
         this.isCollectable = false;
         setLayer(Layer.INVISIBLE);
     }
 
     @Override
-    public void setCollectEffect(CollectEffect collectEffect) {
-        this.collectEffect = collectEffect;
+    public Image getImage() {
+       return image;
     }
+
 
     @Override
     public void reset() {
