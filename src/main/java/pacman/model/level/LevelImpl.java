@@ -122,13 +122,6 @@ public class LevelImpl implements Level {
             }
         } else {
 
-            // Increment count for FRIGHTENED mode ghosts
-            if (currentGhostMode == GhostMode.FRIGHTENED) {
-                for (Ghost ghost : ghosts) {
-                    ghost.incrementCount();
-                }
-            }
-
             // Check for mode transition based on tick count
             if (tickCount >= modeLengths.get(currentGhostMode)) {
                 if (currentGhostMode != GhostMode.FRIGHTENED) {
@@ -140,14 +133,12 @@ public class LevelImpl implements Level {
                 } else {
                     // In FRIGHTENED mode, check duration
                     for (Ghost ghost : this.ghosts) {
-                        if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)) {
                             ghost.resetCount();
                             if (ghost.getCurrentState() instanceof FrightenedState) {
                                 ghost.transitionState();
                             }
                             ghost.setGhostMode(GhostMode.SCATTER);
                             ghostEaten = 0; // Reset the count of ghosts eaten
-                        }
                     }
                     currentGhostMode = GhostMode.SCATTER; // Ensure mode is set to SCATTER
                 }
@@ -190,6 +181,13 @@ public class LevelImpl implements Level {
 
             // Handle collisions with static entities
             handleCollisionsWithStaticEntities(dynamicEntities);
+        }
+
+        // Increment count for FRIGHTENED mode ghosts
+        if (currentGhostMode == GhostMode.FRIGHTENED) {
+            for (Ghost ghost : ghosts) {
+                ghost.incrementCount();
+            }
         }
 
         tickCount++;
@@ -280,7 +278,9 @@ public class LevelImpl implements Level {
         if (collectable instanceof PowerPellet) {
             for (Ghost ghost : ghosts) {
                 ghost.setGhostMode(GhostMode.FRIGHTENED);
+                ghost.setCurrentState(ghost.getNormalState());
                 ghost.transitionState();
+                ghost.resetCount();
                 tickCount = 0;
             }
             currentGhostMode = GhostMode.FRIGHTENED;
