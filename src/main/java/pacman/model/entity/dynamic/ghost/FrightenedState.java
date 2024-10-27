@@ -1,24 +1,29 @@
 package pacman.model.entity.dynamic.ghost;
 
 public class FrightenedState implements GhostState {
+    Ghost ghost;
+
+    public FrightenedState(Ghost ghost) {
+        this.ghost = ghost;
+    }
     @Override
-    public void activate(Ghost ghost) {
+    public void activate() {
         ghost.setGhostMode(GhostMode.FRIGHTENED);
         ghost.setCurrentImage(ghost.getFrightenedImage());
     }
 
     @Override
-    public void deactivate(Ghost ghost) {
+    public void deactivate() {
         ghost.setGhostMode(GhostMode.SCATTER);
         ghost.setCurrentImage(ghost.getNormalImage());
     }
 
     @Override
-    public GhostState transitionToNextState(Ghost ghost) {
+    public GhostState transitionToNextState() {
         if ((ghost.getCurrentState() instanceof FrightenedState)) {
-            this.deactivate(ghost);
+            this.deactivate();
             ghost.setCurrentState(ghost.getNormalState());
-            ghost.getCurrentState().activate(ghost);
+            ghost.getCurrentState().activate();
         }
         return ghost.getNormalState();
     }

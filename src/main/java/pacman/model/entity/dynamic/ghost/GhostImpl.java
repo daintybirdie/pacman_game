@@ -36,8 +36,8 @@ public class GhostImpl implements Ghost {
 
     // State management
     private GhostState currentState; // New field for state management
-    private final GhostState normalState = new NormalState(); // Normal state
-    private final GhostState frightenedState = new FrightenedState(); // Frightened state
+    private final GhostState normalState = new NormalState(this); // Normal state
+    private final GhostState frightenedState = new FrightenedState(this); // Frightened state
 
     private static final double SOME_DISTANCE = 50;
 
@@ -86,15 +86,15 @@ public class GhostImpl implements Ghost {
     }
 
     public void transitionState() {
-        currentState = currentState.transitionToNextState(this);
+        currentState = currentState.transitionToNextState();
     }
 
     public void activateState() {
-        currentState.activate(this);
+        currentState.activate();
     }
 
     public void deactivateState() {
-        currentState.activate(this);
+        currentState.activate();
     }
 
     public void setCurrentState(GhostState state) {

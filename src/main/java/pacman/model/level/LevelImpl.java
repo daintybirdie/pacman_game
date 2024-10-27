@@ -224,7 +224,7 @@ public class LevelImpl implements Level {
             ghostEaten++;
             this.points = 200 * ghostEaten; // Award points for eating the ghost
             notifyObserversWithScoreChange(points);
-            ghost.getCurrentState().deactivate(ghost);
+            ghost.getCurrentState().deactivate();
             ghost.reset(); // Reset only this specific ghost
             ghost.setPaused(true); // Pause movement
             // Create a Timeline to resume movement after 1 second
