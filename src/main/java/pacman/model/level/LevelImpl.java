@@ -109,7 +109,6 @@ public class LevelImpl implements Level {
     }
 
 
-
     @Override
     public void tick() {
         if (this.gameState != GameState.IN_PROGRESS) {
@@ -142,7 +141,10 @@ public class LevelImpl implements Level {
                     // In FRIGHTENED mode, check duration
                     for (Ghost ghost : this.ghosts) {
                         if (ghost.getCount() >= modeLengths.get(GhostMode.FRIGHTENED)) {
-                            ghost.deactivateFrightenedMode();
+                            ghost.resetCount();
+                            if (ghost.getCurrentState() instanceof FrightenedState) {
+                                ghost.transitionState();
+                            }
                             ghost.setGhostMode(GhostMode.SCATTER);
                             ghostEaten = 0; // Reset the count of ghosts eaten
                         }
@@ -222,7 +224,7 @@ public class LevelImpl implements Level {
             ghostEaten++;
             this.points = 200 * ghostEaten; // Award points for eating the ghost
             notifyObserversWithScoreChange(points);
-            ghost.deactivateFrightenedMode();
+            ghost.getCurrentState().deactivate(ghost);
             ghost.reset(); // Reset only this specific ghost
             ghost.setPaused(true); // Pause movement
             // Create a Timeline to resume movement after 1 second
@@ -268,7 +270,7 @@ public class LevelImpl implements Level {
         if (collectable instanceof PowerPellet) {
             for (Ghost ghost : ghosts) {
                 ghost.setGhostMode(GhostMode.FRIGHTENED);
-                ghost.resetCount();
+                ghost.transitionState();
                 tickCount = 0;
             }
             currentGhostMode = GhostMode.FRIGHTENED;

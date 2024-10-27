@@ -33,7 +33,6 @@ public class GhostImpl implements Ghost {
     // IMAGES
     private Image normalImage;
     private Image frightenedImage;
-    private Image currentImage;
 
     // State management
     private GhostState currentState; // New field for state management
@@ -86,26 +85,34 @@ public class GhostImpl implements Ghost {
         return frightenedImage; // Return frightened ghost image
     }
 
-    // Method to activate frightened mode
-    public void activateFrightenedMode() {
-        if (!(currentState instanceof FrightenedState)) { // Only activate if not already in FRIGHTENED state
-            currentState = frightenedState;
-            currentState.activate(this);
-        }
+    public void transitionState() {
+        currentState = currentState.transitionToNextState(this);
+    }
+
+    public void activateState() {
+        currentState.activate(this);
+    }
+
+    public void deactivateState() {
+        currentState.activate(this);
+    }
+
+    public void setCurrentState(GhostState state) {
+        this.currentState = state;
+    }
+
+    public GhostState getNormalState() {
+        return normalState;
+    }
+
+    public GhostState getFrightenedState() {
+        return frightenedState;
     }
 
 
     @Override
     public GhostState getCurrentState() {
         return  currentState;
-    }
-
-    // Method to deactivate frightened mode
-    public void deactivateFrightenedMode() {
-        if ((currentState instanceof FrightenedState)) {
-            currentState.deactivate(this);
-            currentState = normalState;
-    }
     }
 
 
@@ -241,9 +248,6 @@ public class GhostImpl implements Ghost {
         this.ghostMode = ghostMode;
         this.kinematicState.setSpeed(speeds.get(ghostMode));
         this.currentDirectionCount = minimumDirectionCount;
-        if (ghostMode == GhostMode.FRIGHTENED) {
-            activateFrightenedMode();
-        }
     }
 
 
@@ -303,8 +307,7 @@ public class GhostImpl implements Ghost {
     public void reset() {
         // ensure ghost state is normal
         if (currentState instanceof FrightenedState) {
-            this.deactivateFrightenedMode();
-            currentState = normalState;
+            transitionState();
         }
         // return ghost to starting position
         this.kinematicState = new KinematicStateImpl.KinematicStateBuilder()

@@ -1,10 +1,12 @@
 package pacman.model.level;
 
 import pacman.model.entity.Renderable;
+import pacman.model.entity.dynamic.ghost.GhostMode;
 import pacman.model.entity.staticentity.collectable.Collectable;
 import pacman.model.level.observer.LevelStateSubject;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The base interface for a Pac-Man level.
@@ -96,4 +98,5 @@ public interface Level extends LevelStateSubject {
      * Level will remove all dynamic entities from game.
      */
     void handleGameEnd();
+
 }

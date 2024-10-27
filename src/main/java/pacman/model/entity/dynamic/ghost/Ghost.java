@@ -1,5 +1,6 @@
 package pacman.model.entity.dynamic.ghost;
 
+import javafx.scene.image.Image;
 import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
@@ -47,10 +48,6 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
      */
     char getName();
 
-    void activateFrightenedMode();
-
-    void deactivateFrightenedMode();
-
     GhostState getCurrentState();
     GhostMode getGhostMode();
     void resetCount();
@@ -59,4 +56,14 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
 
     void setPaused(boolean b);
     boolean isPaused();
+    void transitionState();
+    void activateState();
+    void deactivateState();
+    void setCurrentImage(Image image);
+    Image getFrightenedImage();
+    Image getNormalImage();
+    void setCurrentState(GhostState state);
+    GhostState getNormalState();
+    GhostState getFrightenedState();
+
 }
