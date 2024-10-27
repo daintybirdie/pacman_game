@@ -3,6 +3,8 @@ package pacman.model.maze;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.physics.Direction;
+import pacman.model.entity.staticentity.collectable.PelletDecorator;
+import pacman.model.entity.staticentity.collectable.PowerPelletDecorator;
 import pacman.model.factories.RenderableFactory;
 import pacman.model.factories.RenderableType;
 

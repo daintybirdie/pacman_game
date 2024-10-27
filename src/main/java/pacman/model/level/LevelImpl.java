@@ -268,9 +268,6 @@ public class LevelImpl implements Level {
 
     @Override
     public void collect(Collectable collectable) {
-        if (collectable instanceof PowerPelletDecorator) {
-            System.out.println("ATTEMPTING TO COLLECT");
-        }
         collectable.collect(this);
     }
 
