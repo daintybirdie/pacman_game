@@ -163,6 +163,16 @@ public class LevelImpl implements Level {
             // Update dynamic entities
             List<DynamicEntity> dynamicEntities = getDynamicEntities();
             for (DynamicEntity dynamicEntity : dynamicEntities) {
+
+                /*
+                 - for each ghost, we obtain the current ghost behaviour if it is in CHASE mode.
+                 - Then we set the chase position according to the unique ghost behaviour of each ghost.
+                 */
+                ghosts.forEach(ghost -> {
+                    if (this.currentGhostMode == GhostMode.CHASE) {
+                        ghost.getGhostBehaviour().chasePosition(ghosts);
+                    }
+                });
                 maze.updatePossibleDirections(dynamicEntity);
                 dynamicEntity.update();
             }
