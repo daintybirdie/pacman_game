@@ -1,6 +1,7 @@
 package pacman.model.level;
 
 import pacman.model.entity.Renderable;
+import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostMode;
 import pacman.model.entity.staticentity.collectable.Collectable;
 import pacman.model.level.observer.LevelStateSubject;
@@ -99,4 +100,11 @@ public interface Level extends LevelStateSubject {
      */
     void handleGameEnd();
 
+    List<Renderable> getCollectables();
+
+    List<Ghost> getGhosts();
+
+    void setTickCount(int num);
+
+    void setCurrentGhostMode(GhostMode mode);
 }

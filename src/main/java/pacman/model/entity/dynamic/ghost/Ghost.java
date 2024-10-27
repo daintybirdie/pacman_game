@@ -2,6 +2,7 @@ package pacman.model.entity.dynamic.ghost;
 
 import javafx.scene.image.Image;
 import pacman.model.entity.dynamic.DynamicEntity;
+import pacman.model.entity.dynamic.ghost.statepattern.GhostState;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
 import pacman.model.factories.GhostChaseBehaviour;

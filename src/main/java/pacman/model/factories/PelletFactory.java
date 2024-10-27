@@ -8,6 +8,8 @@ import pacman.model.entity.dynamic.physics.BoundingBoxImpl;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.staticentity.collectable.Pellet;
 import pacman.model.entity.staticentity.collectable.PowerPellet;
+import pacman.model.entity.staticentity.collectable.compositepattern.PelletEffect;
+import pacman.model.entity.staticentity.collectable.compositepattern.PowerPelletEffect;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,10 +53,10 @@ public class PelletFactory implements RenderableFactory {
             // Check if the renderableType is 'z' for PowerPellet
             if (renderableType == 'z') {
                 // Return a PowerPellet if renderableType is 'z'
-                return new PowerPellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_Z);
+                return new PowerPellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_Z, new PowerPelletEffect());
             } else if (renderableType == '7') {
                 // Return a regular Pellet if renderableType is '7'
-                return new Pellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_7);
+                return new Pellet(boundingBox, layer, PELLET_IMAGE, NUM_POINTS_7, new PelletEffect());
             } else {
                 // Handle unknown types if necessary
                 throw new ConfigurationParseException("Unknown pellet type");

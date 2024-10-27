@@ -2,6 +2,9 @@ package pacman.model.entity.dynamic.ghost;
 
 import javafx.scene.image.Image;
 import pacman.model.entity.Renderable;
+import pacman.model.entity.dynamic.ghost.statepattern.FrightenedState;
+import pacman.model.entity.dynamic.ghost.statepattern.GhostState;
+import pacman.model.entity.dynamic.ghost.statepattern.NormalState;
 import pacman.model.entity.dynamic.physics.*;
 import pacman.model.factories.GhostChaseBehaviour;
 import pacman.model.level.Level;

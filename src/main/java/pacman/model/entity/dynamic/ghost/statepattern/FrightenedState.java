@@ -1,4 +1,7 @@
-package pacman.model.entity.dynamic.ghost;
+package pacman.model.entity.dynamic.ghost.statepattern;
+
+import pacman.model.entity.dynamic.ghost.Ghost;
+import pacman.model.entity.dynamic.ghost.GhostMode;
 
 public class FrightenedState implements GhostState {
     Ghost ghost;

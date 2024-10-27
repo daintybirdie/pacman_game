@@ -1,6 +1,7 @@
 package pacman.model.entity.staticentity.collectable;
 
 import pacman.model.entity.Renderable;
+import pacman.model.level.Level;
 
 /**
  * Represents a collectable entity in the Pac-Man Game.
@@ -10,7 +11,7 @@ public interface Collectable extends Renderable {
     /**
      * Sets collectable to collected
      */
-    void collect();
+    void collect(Level level, Collectable collectable);
 
     /**
      * Returns whether the collectable is currently collectable

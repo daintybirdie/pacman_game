@@ -8,9 +8,8 @@ import pacman.ConfigurationParseException;
 import pacman.model.engine.observer.GameState;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.DynamicEntity;
-import pacman.model.entity.dynamic.ghost.FrightenedState;
+import pacman.model.entity.dynamic.ghost.statepattern.FrightenedState;
 import pacman.model.entity.dynamic.ghost.Ghost;
-import pacman.model.entity.dynamic.ghost.GhostImpl;
 import pacman.model.entity.dynamic.ghost.GhostMode;
 import pacman.model.entity.dynamic.physics.PhysicsEngine;
 import pacman.model.entity.dynamic.player.Controllable;
@@ -263,31 +262,30 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public void collect(Collectable collectable) {
-        Pellet pellet;
-        this.collectables.remove(collectable);
-        if (collectable instanceof PowerPellet) {
-            pellet = (PowerPellet) collectable;
-        } else {
-            pellet = (Pellet) collectable;
-        }
-        this.points = pellet.getPoints();
-        notifyObserversWithScoreChange(points);
-
-        // Check if it's a PowerPellet to activate frightened mode
-        if (collectable instanceof PowerPellet) {
-            for (Ghost ghost : ghosts) {
-                ghost.setGhostMode(GhostMode.FRIGHTENED);
-                ghost.setCurrentState(ghost.getNormalState());
-                ghost.transitionState();
-                ghost.resetCount();
-                tickCount = 0;
-            }
-            currentGhostMode = GhostMode.FRIGHTENED;
-        }
+    public List<Renderable> getCollectables() {
+        return collectables;
     }
 
+    @Override
+    public void collect(Collectable collectable) {
+      Pellet pellet = (Pellet) collectable;
+      pellet.collect(this, collectable);
+    }
 
+    @Override
+    public List<Ghost> getGhosts() {
+        return ghosts;
+    }
+
+    @Override
+    public void setTickCount(int num) {
+        this.tickCount = num;
+    }
+
+    @Override
+    public void setCurrentGhostMode(GhostMode mode) {
+        currentGhostMode = mode;
+    }
 
     @Override
     public void handleLoseLife() {

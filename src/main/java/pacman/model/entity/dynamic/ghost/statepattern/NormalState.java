@@ -1,4 +1,6 @@
-package pacman.model.entity.dynamic.ghost;
+package pacman.model.entity.dynamic.ghost.statepattern;
+
+import pacman.model.entity.dynamic.ghost.Ghost;
 
 public class NormalState implements GhostState {
     Ghost ghost;

@@ -113,7 +113,7 @@ public class Pacman implements Controllable, PlayerPositionSubject {
         if (level.isCollectable(renderable)) {
             Collectable collectable = (Collectable) renderable;
             level.collect(collectable);
-            collectable.collect();
+            collectable.collect(level, collectable);
         }
     }
 
