@@ -6,7 +6,7 @@ import pacman.model.entity.dynamic.ghost.statepattern.FrightenedState;
 import pacman.model.entity.dynamic.ghost.statepattern.GhostState;
 import pacman.model.entity.dynamic.ghost.statepattern.NormalState;
 import pacman.model.entity.dynamic.physics.*;
-import pacman.model.factories.GhostChaseBehaviour;
+import pacman.model.chasebehaviour.GhostChaseBehaviour;
 import pacman.model.level.Level;
 import pacman.model.maze.Maze;
 

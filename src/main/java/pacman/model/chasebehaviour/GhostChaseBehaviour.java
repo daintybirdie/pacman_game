@@ -1,4 +1,4 @@
-package pacman.model.factories;
+package pacman.model.chasebehaviour;
 
 import pacman.model.entity.dynamic.ghost.Ghost;
 

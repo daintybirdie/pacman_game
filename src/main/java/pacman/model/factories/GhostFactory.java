@@ -2,6 +2,7 @@ package pacman.model.factories;
 
 import javafx.scene.image.Image;
 import pacman.ConfigurationParseException;
+import pacman.model.chasebehaviour.*;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.ghost.GhostImpl;
 import pacman.model.entity.dynamic.ghost.GhostMode;

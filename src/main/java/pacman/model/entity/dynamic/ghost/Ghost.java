@@ -5,7 +5,7 @@ import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.ghost.statepattern.GhostState;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
-import pacman.model.factories.GhostChaseBehaviour;
+import pacman.model.chasebehaviour.GhostChaseBehaviour;
 
 import java.util.Map;
 
