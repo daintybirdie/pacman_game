@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
-import pacman.model.factories.GhostBehaviour;
+import pacman.model.factories.GhostChaseBehaviour;
 
 import java.util.Map;
 
@@ -34,13 +34,13 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
     /**
      * @return Ghostbehaviour, which allows for dynamically setting target position based on unique ghost behaviour
      */
-    GhostBehaviour getGhostBehaviour();
+    GhostChaseBehaviour getGhostBehaviour();
 
     /**
      *
      * @param ghostBehaviour sets the ghost behaviour during intialisation (for CHASE MODE)- updated in tick()
      */
-    void setGhostBehaviour(GhostBehaviour ghostBehaviour);
+    void setGhostBehaviour(GhostChaseBehaviour ghostBehaviour);
 
     /**
      *

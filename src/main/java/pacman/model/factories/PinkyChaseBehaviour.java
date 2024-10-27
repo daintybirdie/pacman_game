@@ -4,12 +4,11 @@ import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostImpl;
 import pacman.model.entity.dynamic.physics.Direction;
 import pacman.model.entity.dynamic.physics.Vector2D;
-import pacman.model.maze.Maze;
 import pacman.model.maze.MazeCreator;
 
 import java.util.List;
 
-public class PinkyChaseBehaviour implements GhostBehaviour {
+public class PinkyChaseBehaviour implements GhostChaseBehaviour {
     private static final double TARGET_DISTANCE = 4; // Tiles ahead of Pacman
     private static final double TILE_SIZE = MazeCreator.RESIZING_FACTOR;
     private GhostImpl pinky;

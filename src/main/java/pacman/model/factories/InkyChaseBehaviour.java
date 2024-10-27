@@ -8,7 +8,7 @@ import pacman.model.maze.MazeCreator;
 
 import java.util.List;
 
-public class InkyChaseBehaviour implements GhostBehaviour {
+public class InkyChaseBehaviour implements GhostChaseBehaviour {
     private static final double DISTANCE = 2; // Tiles ahead of Pacman
     private static final double TILE_SIZE = MazeCreator.RESIZING_FACTOR; // Tiles ahead of Pacman
     private GhostImpl blinky;

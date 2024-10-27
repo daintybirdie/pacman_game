@@ -7,9 +7,7 @@ import pacman.model.entity.dynamic.ghost.GhostImpl;
 import pacman.model.entity.dynamic.ghost.GhostMode;
 import pacman.model.entity.dynamic.physics.*;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,12 +33,12 @@ public class GhostFactory implements RenderableFactory {
      */
     private GhostImpl ghost;
     private Vector2D targetCorner;
-    private GhostBehaviour chaseBehaviour;
+    private GhostChaseBehaviour chaseBehaviour;
     // will hold the specific image a ghost instance the map creates a mapping between the character in map.txt and associated image loaded
     private final Image image;
     private static Map<Character, Image> IMAGES = new HashMap<>();
     // map will hold the ghost behaviour and allocated corner, for each ghost type
-    private static Map<Character, Map<GhostBehaviour, Vector2D>> GHOSTMAP = new HashMap<>();
+    private static Map<Character, Map<GhostChaseBehaviour, Vector2D>> GHOSTMAP = new HashMap<>();
 
     static {
         IMAGES.put('b', BLINKY_IMAGE);
@@ -74,10 +72,10 @@ public class GhostFactory implements RenderableFactory {
                     .build();
 
             // Retrieve the inner map from GHOSTMAP, on the renderableType
-            Map<GhostBehaviour, Vector2D> behaviourMap = GHOSTMAP.get(renderableType);
+            Map<GhostChaseBehaviour, Vector2D> behaviourMap = GHOSTMAP.get(renderableType);
 
             if (behaviourMap != null && !behaviourMap.isEmpty()) {
-                Map.Entry<GhostBehaviour, Vector2D> entry = behaviourMap.entrySet().iterator().next();
+                Map.Entry<GhostChaseBehaviour, Vector2D> entry = behaviourMap.entrySet().iterator().next();
                 chaseBehaviour = entry.getKey();
                 targetCorner = entry.getValue();
             } else {

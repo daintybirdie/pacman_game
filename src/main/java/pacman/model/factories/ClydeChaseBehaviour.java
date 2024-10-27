@@ -2,13 +2,12 @@ package pacman.model.factories;
 
 import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostImpl;
-import pacman.model.entity.dynamic.physics.Direction;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.maze.MazeCreator;
 
 import java.util.List;
 
-public class ClydeChaseBehaviour implements GhostBehaviour {
+public class ClydeChaseBehaviour implements GhostChaseBehaviour {
     private static final double TARGET_DISTANCE = 8;
     private static final double TILE_SIZE = MazeCreator.RESIZING_FACTOR;
     private static final double BOTTOM_Y_POSITION_OF_MAP =  16 * 34;

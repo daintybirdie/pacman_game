@@ -3,8 +3,7 @@ package pacman.model.entity.dynamic.ghost;
 import javafx.scene.image.Image;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.physics.*;
-import pacman.model.factories.GhostBehaviour;
-import pacman.model.factories.GhostFactory;
+import pacman.model.factories.GhostChaseBehaviour;
 import pacman.model.level.Level;
 import pacman.model.maze.Maze;
 
@@ -28,7 +27,7 @@ public class GhostImpl implements Ghost {
     private Set<Direction> possibleDirections;
     private Map<GhostMode, Double> speeds;
     private int currentDirectionCount = 0;
-    private GhostBehaviour ghostBehaviour;
+    private GhostChaseBehaviour ghostBehaviour;
     private char name;
     // IMAGES
     private Image normalImage;
@@ -146,12 +145,12 @@ public class GhostImpl implements Ghost {
     }
 
     @Override
-    public GhostBehaviour getGhostBehaviour() {
+    public GhostChaseBehaviour getGhostBehaviour() {
         return ghostBehaviour;
     }
 
     @Override
-    public void setGhostBehaviour(GhostBehaviour ghostBehaviour) {
+    public void setGhostBehaviour(GhostChaseBehaviour ghostBehaviour) {
         this.ghostBehaviour = ghostBehaviour;
     }
 
