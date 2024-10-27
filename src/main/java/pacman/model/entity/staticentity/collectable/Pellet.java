@@ -23,11 +23,13 @@ public class Pellet extends StaticEntityImpl implements Collectable {
 
     @Override
     public void collect(Level level) {
-        level.getCollectables().remove(this);
-        this.currentPoints = this.getPoints();
-        level.notifyObserversWithScoreChange(currentPoints);
-        this.isCollectable = false;
-        setLayer(Layer.INVISIBLE);
+        if (level.getCollectables().contains(this)) {
+            level.getCollectables().remove(this);
+            this.currentPoints = this.getPoints();
+            level.notifyObserversWithScoreChange(currentPoints);
+            this.isCollectable = false;
+            setLayer(Layer.INVISIBLE);
+        }
     }
 
     @Override
@@ -44,7 +46,7 @@ public class Pellet extends StaticEntityImpl implements Collectable {
 
     @Override
     public boolean isCollectable() {
-        return this.isCollectable;
+        return true;
     }
 
     @Override

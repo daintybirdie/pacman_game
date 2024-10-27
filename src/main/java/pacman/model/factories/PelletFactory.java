@@ -52,10 +52,9 @@ public class PelletFactory implements RenderableFactory {
         if (renderableType == 'z') {
             // Return a PowerPellet if renderableType is 'z'
             Collectable pellet = new Pellet(boundingBox, layer, PELLET_IMAGE);
-            PowerPelletDecorator powerPelletDecorator = new PowerPelletDecorator((Pellet) pellet);
-            return powerPelletDecorator;
+//            return new PowerPelletDecorator((Pellet) pellet);
+            return pellet;
         } else if (renderableType == '7') {
-            Pellet pellet = new Pellet(boundingBox, layer, PELLET_IMAGE);
             return new Pellet(boundingBox, layer, PELLET_IMAGE);
         } else {
             throw new ConfigurationParseException("Unknown pellet type");

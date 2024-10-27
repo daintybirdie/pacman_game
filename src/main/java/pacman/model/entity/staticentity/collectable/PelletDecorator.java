@@ -13,10 +13,10 @@ public abstract class PelletDecorator implements Collectable {
         this.collectable = collectable;
     }
 
-    @Override
-    public void collect(Level level) {
-        collectable.collect(level);
-    }
+//    @Override
+//    public void collect(Level level) {
+//        collectable.collect(level);
+//    }
 
     @Override
     public Image getImage() {
@@ -35,6 +35,7 @@ public abstract class PelletDecorator implements Collectable {
 
     @Override
     public boolean isCollectable() {
+        System.out.println(collectable.isCollectable());
         return true;
     }
 
