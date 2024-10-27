@@ -1,6 +1,7 @@
 package pacman.model.entity.staticentity.collectable;
 
 import javafx.scene.image.Image;
+import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.staticentity.StaticEntityImpl;
 import pacman.model.level.Level;
@@ -11,8 +12,8 @@ import pacman.model.level.Level;
 public class Pellet extends StaticEntityImpl implements Collectable {
 
     private final int points = 10;
-    private int currentPoints;
-    private boolean isCollectable;
+    protected int currentPoints;
+    boolean isCollectable;
     private Image image;
 
     public Pellet(BoundingBox boundingBox, Layer layer, Image image) {

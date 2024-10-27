@@ -42,7 +42,7 @@ public class StaticEntityImpl implements Renderable, StaticEntity {
         return this.layer;
     }
 
-    protected void setLayer(Layer layer) {
+    public void setLayer(Layer layer) {
         this.layer = layer;
     }
 

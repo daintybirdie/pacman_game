@@ -17,6 +17,7 @@ import pacman.model.entity.dynamic.player.Pacman;
 import pacman.model.entity.staticentity.StaticEntity;
 import pacman.model.entity.staticentity.collectable.Collectable;
 import pacman.model.entity.staticentity.collectable.Pellet;
+import pacman.model.entity.staticentity.collectable.PowerPelletDecorator;
 import pacman.model.level.observer.LevelStateObserver;
 import pacman.model.maze.Maze;
 
@@ -267,8 +268,10 @@ public class LevelImpl implements Level {
 
     @Override
     public void collect(Collectable collectable) {
-      Pellet pellet = (Pellet) collectable;
-      pellet.collect(this);
+        if (collectable instanceof PowerPelletDecorator) {
+            System.out.println("ATTEMPTING TO COLLECT");
+        }
+        collectable.collect(this);
     }
 
     @Override
