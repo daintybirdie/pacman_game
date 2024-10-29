@@ -24,8 +24,6 @@ public class PowerPelletDecorator extends CollectableDecorator {
             ghost.setCurrentState(ghost.getNormalState());
             // Transition into Frightened state, since only 2 states (either frightened or normal)
             ghost.transitionState();
-            // Resetting internal counter for each ghost
-            ghost.resetCount();
             level.setTickCount(0);
         }
         // Global variable for all ghosts, dictating their maximum stay duration in FRIGHTENED mode

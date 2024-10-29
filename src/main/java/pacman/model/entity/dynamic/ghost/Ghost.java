@@ -49,23 +49,40 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
      */
     char getName();
 
+    // Get current state of Ghost
     GhostState getCurrentState();
-    GhostMode getGhostMode();
-    void resetCount();
-    void incrementCount();
-    int getCount();
 
+    // Get current ghost mode
+    GhostMode getGhostMode();
+
+    // Update whether mode is paused or not
     void setPaused(boolean b);
+
+    // Get whether paused boolean
     boolean isPaused();
+
+    // Transition between states for FrightenedState and NormalState
     void transitionState();
-    void activateState();
-    void deactivateState();
+
+    // Setting the ghosts current image
     void setCurrentImage(Image image);
+
+    // Get Frightened image
     Image getFrightenedImage();
+
+    // Get ghosts unique image non-frightened state
     Image getNormalImage();
+
+    // Set ghost's current state
     void setCurrentState(GhostState state);
+
+    // Get the ghost's NormalState instance
     GhostState getNormalState();
+
+    // Get the ghost's FrightenedState instance
     GhostState getFrightenedState();
+
+    // Get the ghost's target location
     Vector2D getTargetLocation();
 
 }

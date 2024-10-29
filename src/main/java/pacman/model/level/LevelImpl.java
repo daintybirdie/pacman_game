@@ -143,13 +143,6 @@ public class LevelImpl implements Level {
             handleCollisionsWithStaticEntities(dynamicEntities);
         }
 
-        // Increment count for FRIGHTENED mode ghosts
-        if (currentGhostMode == GhostMode.FRIGHTENED) {
-            for (Ghost ghost : ghosts) {
-                ghost.incrementCount();
-            }
-        }
-
         tickCount++;
     }
 
@@ -164,7 +157,6 @@ public class LevelImpl implements Level {
             } else {
                 // In FRIGHTENED mode, check duration
                 for (Ghost ghost : this.ghosts) {
-                    ghost.resetCount();
                     if (ghost.getCurrentState() instanceof FrightenedState) {
                         ghost.transitionState();
                     }

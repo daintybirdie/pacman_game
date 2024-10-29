@@ -64,17 +64,6 @@ public class GhostImpl implements Ghost {
         this.currentState = normalState; // Start in normal state
     }
 
-    public void incrementCount() {
-        tickCountFrightened++;
-    }
-
-    public void resetCount() {
-        tickCountFrightened = 0;
-    }
-
-    public int getCount() {
-        return tickCountFrightened;
-    }
     public void setCurrentImage(Image image) {
         this.image = image; // This will update the image shown for the ghost
     }
@@ -89,14 +78,6 @@ public class GhostImpl implements Ghost {
 
     public void transitionState() {
         currentState = currentState.transitionToNextState();
-    }
-
-    public void activateState() {
-        currentState.activate();
-    }
-
-    public void deactivateState() {
-        currentState.activate();
     }
 
     public void setCurrentState(GhostState state) {
@@ -204,11 +185,10 @@ public class GhostImpl implements Ghost {
     private Vector2D getFrightenedTargetLocation() {
         // Calculate a direction vector away from the player position
         Vector2D currentPosition = this.kinematicState.getPosition(); // Get current position of the ghost
-        Vector2D directionAwayFromPlayer = this.playerPosition.subtract(currentPosition).normalize(); // Normalize to get a unit vector
+        Vector2D directionAwayFromPlayer = this.playerPosition.subtract(currentPosition).normalize(); // Normalise to get a unit vector
         Vector2D awayFromPlayerLocation = currentPosition.add(directionAwayFromPlayer.scale(SOME_DISTANCE)); // Scale by a distance
         return awayFromPlayerLocation; // Return the calculated target location
     }
-
 
 
     public char getName() {
