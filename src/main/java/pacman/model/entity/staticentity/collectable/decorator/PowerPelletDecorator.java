@@ -19,8 +19,6 @@ public class PowerPelletDecorator extends CollectableDecorator {
         // call CollectableDecorator's collect method
         super.collect(level);
         for (Ghost ghost : level.getGhosts()) {
-            // For each individual ghost, set to FRIGHTENED
-            ghost.setGhostMode(GhostMode.FRIGHTENED);
             // Set all ghosts in normal mode, accounting for when a power pellet is eaten when  in FRIGHTENED mode
             // This ensures when ghosts transition, they all transition to FRIGHTENED mode
             ghost.setCurrentState(ghost.getNormalState());

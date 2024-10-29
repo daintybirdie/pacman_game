@@ -17,10 +17,12 @@ public class NormalState implements GhostState {
     @Override
     public void deactivate() {
         // No action needed when leaving normal state, because the activate method in frightened state takes care of this.
+        // This is because there are only two possible states: FrightenedState or NormalState
     }
 
     @Override
     public GhostState transitionToNextState() {
+        // Only transition to FrightenedState instance, if current state is NormalState
         if ((ghost.getCurrentState() instanceof NormalState)) {
             this.deactivate();
             ghost.setCurrentState(ghost.getFrightenedState());
