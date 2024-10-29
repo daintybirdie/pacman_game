@@ -6,10 +6,19 @@ import java.util.List;
 
 
 public class BlinkyChaseBehaviour implements GhostChaseBehaviour {
+    private Ghost blinky;
 
     @Override
     public void chasePosition(List<Ghost> ghosts) {
-        //no specialised behaviour for blinky.
+        for (Ghost ghost :ghosts) {
+            // Get Blinky Ghost
+            if (ghost.getName() == 'b') {
+                blinky = ghost;
+                break;
+            }
+        }
+        // Blinky's target location is default
+        blinky.setTargetLocation(blinky.getTargetLocation());
     }
 
 }

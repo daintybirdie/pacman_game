@@ -14,6 +14,7 @@ public class PinkyChaseBehaviour implements GhostChaseBehaviour {
     @Override
     public void chasePosition(List<Ghost> ghosts) {
         for (Ghost ghost :ghosts)
+            // Get Pinky Ghost
             if (ghost.getName() == 's') {
                 pinky = ghost;
                 break;
@@ -22,6 +23,7 @@ public class PinkyChaseBehaviour implements GhostChaseBehaviour {
         Vector2D pacmanPosition = pinky.getTargetLocation();
         Direction pacmanDirection = pinky.getDirection();
 
+        // Pinky's Chase position is 4 grid spaces in front of PacMan's position
         Vector2D targetPosition = switch (pacmanDirection) {
             case UP -> pacmanPosition.add(new Vector2D(0, -TARGET_DISTANCE * TILE_SIZE));
             case DOWN -> pacmanPosition.add(new Vector2D(0, TARGET_DISTANCE * TILE_SIZE));
