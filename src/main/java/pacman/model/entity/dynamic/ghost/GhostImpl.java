@@ -43,8 +43,7 @@ public class GhostImpl implements Ghost {
 
     private static final double SOME_DISTANCE = 50;
 
-    //frightened tick
-    private int tickCountFrightened = 0;
+    // variable used to pause ghost movement after being eaten in frightened state
     private boolean isPaused = false;
 
     public GhostImpl(Image image, BoundingBox boundingBox, KinematicState kinematicState, GhostMode ghostMode, Vector2D targetCorner, char name,
