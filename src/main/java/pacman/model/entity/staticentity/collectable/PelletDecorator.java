@@ -31,7 +31,8 @@ public abstract class PelletDecorator extends StaticEntityImpl implements Collec
 
     @Override
     public void reset() {
-        collectable.reset();
+        this.isCollectable = true;
+        setLayer(Layer.BACKGROUND);
     }
 
     @Override

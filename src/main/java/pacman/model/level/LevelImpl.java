@@ -87,12 +87,6 @@ public class LevelImpl implements Level {
         this.modeLengths = levelConfigurationReader.getGhostModeLengths();
         // Set up collectables
         this.collectables = new ArrayList<>(maze.getPellets());
-        System.out.println("New Level");
-        for (Renderable item : collectables) {
-            if (item instanceof PowerPelletDecorator) {
-                System.out.println(item);
-            }
-        }
     }
 
     @Override
