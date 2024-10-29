@@ -22,8 +22,6 @@ public class PelletFactory implements RenderableFactory {
     private char renderableType;
     private static Map<Character, Integer> PELLETMAP = new HashMap<>();
 
-    //height and width
-
 
     public PelletFactory(Character renderableType) {
         this.renderableType = renderableType;
@@ -48,10 +46,12 @@ public class PelletFactory implements RenderableFactory {
 
         // Check if the renderableType is 'z' for PowerPellet
         if (renderableType == 'z') {
+            // Create a Pellet instance, and wrap it using the PowerPelletDecorator to enable Power Pellet behaviour
             Collectable pellet = new Pellet(boundingBox, layer, PELLET_IMAGE);
             Collectable powerPellet = new PowerPelletDecorator(pellet);
             return powerPellet;
         }
+        // renderableType is '7' for regular Pellet
         else if (renderableType == '7') {
             return new Pellet(boundingBox, layer, PELLET_IMAGE);
         } else {

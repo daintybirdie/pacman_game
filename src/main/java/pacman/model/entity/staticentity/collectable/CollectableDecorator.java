@@ -1,19 +1,20 @@
 package pacman.model.entity.staticentity.collectable;
 
 import javafx.scene.image.Image;
-import pacman.model.entity.dynamic.ghost.Ghost;
-import pacman.model.entity.dynamic.ghost.GhostMode;
 import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.staticentity.StaticEntityImpl;
 import pacman.model.level.Level;
 
-public abstract class PelletDecorator extends StaticEntityImpl implements Collectable {
+/**
+    Abstract class that decorates objects of type Collectable
+ */
+public abstract class CollectableDecorator extends StaticEntityImpl implements Collectable {
     protected Collectable collectable;
     protected int displayPoints;
     protected boolean isCollectable;
 
-    public PelletDecorator(Collectable collectable) {
+    public CollectableDecorator(Collectable collectable) {
         super(collectable.getBoundingBox(), collectable.getLayer(), collectable.getImage());
         this.collectable = collectable;
         isCollectable = true;
@@ -62,11 +63,13 @@ public abstract class PelletDecorator extends StaticEntityImpl implements Collec
 
     @Override
     public void collect(Level level) {
-        // Check if the collectable is present in the level's collectables
+        // Check if the collectable is present in the level's collectables before removing
         if (level.getCollectables().contains(this)) {
             level.getCollectables().remove(this);
+            // score observer notification
             this.displayPoints = this.getPoints();
             level.notifyObserversWithScoreChange(displayPoints);
+            // making the pellet not collectable and invisible after removing from the collectables list
             this.isCollectable = false;
             this.setLayer(Layer.INVISIBLE);
         }

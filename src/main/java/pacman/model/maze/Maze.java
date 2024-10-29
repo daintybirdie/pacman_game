@@ -3,9 +3,6 @@ package pacman.model.maze;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.physics.Direction;
-import pacman.model.entity.staticentity.collectable.PelletDecorator;
-import pacman.model.entity.staticentity.collectable.PowerPelletDecorator;
-import pacman.model.factories.RenderableFactory;
 import pacman.model.factories.RenderableType;
 
 import java.util.*;
@@ -70,15 +67,14 @@ public class Maze {
      * @param x              grid X position
      * @param y              grid Y position
      */
-    // I used a map, that used the Consumer interface to add all the types.
-    // This is because by adding by having the if statement chunks, it made the code harder to maintain
+
     public void addRenderable(Renderable renderable, char renderableType, int x, int y) {
         if (renderable != null) {
             // Get the action associated with the renderable type using the character directly
             Consumer<Renderable> action = renderableActions.get(renderableType);
 
             if (action != null) {
-                action.accept(renderable); // Execute the action
+                action.accept(renderable);
             } else {
                 // handling the cases where the type is not recognised- made to be a wall
                 this.isWall.put(formatCoordinates(x, y), true);
