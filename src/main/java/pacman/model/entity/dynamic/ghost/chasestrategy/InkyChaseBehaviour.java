@@ -1,4 +1,4 @@
-package pacman.model.chasestrategy;
+package pacman.model.entity.dynamic.ghost.chasestrategy;
 
 import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.physics.Direction;

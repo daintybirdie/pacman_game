@@ -5,7 +5,7 @@ import pacman.model.entity.dynamic.DynamicEntity;
 import pacman.model.entity.dynamic.ghost.statepattern.GhostState;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
-import pacman.model.chasestrategy.GhostChaseBehaviour;
+import pacman.model.entity.dynamic.ghost.chasestrategy.GhostChaseBehaviour;
 
 import java.util.Map;
 
@@ -45,7 +45,7 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
 
     /**
      *
-     * @return character- the name of the ghost is the character allocated on map.txt
+     * @return character the name of the ghost is the character allocated on map.txt
      */
     char getName();
 

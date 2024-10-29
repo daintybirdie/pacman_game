@@ -2,10 +2,10 @@ package pacman.model.factories;
 
 import javafx.scene.image.Image;
 import pacman.ConfigurationParseException;
-import pacman.model.chasestrategy.*;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.ghost.GhostImpl;
 import pacman.model.entity.dynamic.ghost.GhostMode;
+import pacman.model.entity.dynamic.ghost.chasestrategy.*;
 import pacman.model.entity.dynamic.physics.*;
 
 import java.util.HashMap;
