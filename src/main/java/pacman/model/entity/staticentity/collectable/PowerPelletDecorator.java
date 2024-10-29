@@ -24,5 +24,10 @@ public class PowerPelletDecorator extends PelletDecorator {
         level.setCurrentGhostMode(GhostMode.FRIGHTENED);
     }
 
+    @Override
+    public int getPoints() {
+        return points;
+    }
+
 }
 
