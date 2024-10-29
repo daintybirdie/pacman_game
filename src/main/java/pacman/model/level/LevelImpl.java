@@ -160,9 +160,8 @@ public class LevelImpl implements Level {
                     if (ghost.getCurrentState() instanceof FrightenedState) {
                         ghost.transitionState();
                     }
-                    ghost.setGhostMode(GhostMode.SCATTER);
-                    ghostEaten = 0; // Reset the count of ghosts eaten
                 }
+                ghostEaten = 0; // Reset the count of ghosts eaten
                 currentGhostMode = GhostMode.SCATTER; // Ensure mode is set to SCATTER
             }
 
@@ -191,7 +190,7 @@ public class LevelImpl implements Level {
             this.points = 200 * ghostEaten; // Award points for eating the ghost
             notifyObserversWithScoreChange(points);
             ghost.getCurrentState().deactivate();
-            ghost.reset(); // Reset only this specific ghost
+            ghost.reset(); // Reset only this specific ghost that was eaten in FRIGHTENED mode
             ghost.setPaused(true); // Pause movement
             // Create a Timeline to resume movement after 1 second
             Timeline pauseTimeline = new Timeline(new KeyFrame(
