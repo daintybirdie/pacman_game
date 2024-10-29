@@ -24,10 +24,13 @@ public class Pellet extends StaticEntityImpl implements Collectable {
 
     @Override
     public void collect(Level level) {
+        // Check if the collectable is present in the level's collectables before removing
         if (level.getCollectables().contains(this)) {
             level.getCollectables().remove(this);
+            // score observer notification
             this.currentPoints = this.getPoints();
             level.notifyObserversWithScoreChange(currentPoints);
+            // making the pellet not collectable and invisible after removing from the collectables list
             this.isCollectable = false;
             setLayer(Layer.INVISIBLE);
         }

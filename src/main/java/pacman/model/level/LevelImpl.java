@@ -119,28 +119,7 @@ public class LevelImpl implements Level {
         } else {
 
             // Check for mode transition based on tick count
-            if (tickCount >= modeLengths.get(currentGhostMode)) {
-                if (currentGhostMode != GhostMode.FRIGHTENED) {
-                    // Transition to the next ghost mode
-                    this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
-                    for (Ghost ghost : this.ghosts) {
-                        ghost.setGhostMode(this.currentGhostMode);
-                    }
-                } else {
-                    // In FRIGHTENED mode, check duration
-                    for (Ghost ghost : this.ghosts) {
-                            ghost.resetCount();
-                            if (ghost.getCurrentState() instanceof FrightenedState) {
-                                ghost.transitionState();
-                            }
-                            ghost.setGhostMode(GhostMode.SCATTER);
-                            ghostEaten = 0; // Reset the count of ghosts eaten
-                    }
-                    currentGhostMode = GhostMode.SCATTER; // Ensure mode is set to SCATTER
-                }
-
-                tickCount = 0; // Reset tick count after processing
-            }
+            checkForModeTransition();
 
             // Handle image swapping for Pacman
             if (tickCount % Pacman.PACMAN_IMAGE_SWAP_TICK_COUNT == 0) {
@@ -149,20 +128,7 @@ public class LevelImpl implements Level {
 
             // Update dynamic entities
             List<DynamicEntity> dynamicEntities = getDynamicEntities();
-            for (DynamicEntity dynamicEntity : dynamicEntities) {
-
-                /*
-                 - for each ghost, we obtain the current ghost behaviour if it is in CHASE mode.
-                 - Then we set the chase position according to the unique ghost behaviour of each ghost.
-                 */
-                ghosts.forEach(ghost -> {
-                    if (this.currentGhostMode == GhostMode.CHASE) {
-                        ghost.getGhostBehaviour().chasePosition(ghosts);
-                    }
-                });
-                maze.updatePossibleDirections(dynamicEntity);
-                dynamicEntity.update();
-            }
+            updateDynamicEntities(dynamicEntities);
 
             // Handle collisions with ghosts
             for (DynamicEntity dynamicEntity : dynamicEntities) {
@@ -189,23 +155,66 @@ public class LevelImpl implements Level {
         tickCount++;
     }
 
-
-    private void handleCollisionsWithStaticEntities(List<DynamicEntity> dynamicEntities) {
-        for (DynamicEntity dynamicEntity : dynamicEntities) {
-            // Check for collisions with static entities
-            if (dynamicEntity instanceof Pacman) {
-                for (StaticEntity staticEntity : getStaticEntities()) {
-                    if (dynamicEntity.collidesWith(staticEntity)) {
-                        dynamicEntity.collideWith(this, staticEntity);
-                        PhysicsEngine.resolveCollision(dynamicEntity, staticEntity);
-                    }
+    private void checkForModeTransition() {
+        if (tickCount >= modeLengths.get(currentGhostMode)) {
+            if (currentGhostMode != GhostMode.FRIGHTENED) {
+                // Transition to the next ghost mode
+                this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
+                for (Ghost ghost : this.ghosts) {
+                    ghost.setGhostMode(this.currentGhostMode);
                 }
+            } else {
+                // In FRIGHTENED mode, check duration
+                for (Ghost ghost : this.ghosts) {
+                    ghost.resetCount();
+                    if (ghost.getCurrentState() instanceof FrightenedState) {
+                        ghost.transitionState();
+                    }
+                    ghost.setGhostMode(GhostMode.SCATTER);
+                    ghostEaten = 0; // Reset the count of ghosts eaten
+                }
+                currentGhostMode = GhostMode.SCATTER; // Ensure mode is set to SCATTER
             }
+
+            tickCount = 0; // Reset tick count after processing
         }
     }
 
 
-    private void handleCollisions(List<DynamicEntity> dynamicEntities) {
+    // This is the high-level method that handle collision
+    // Delegates to appropriate collision handling mechanism for whether the ghost is FRIGHTENED or not
+    private void handleGhostCollision(Ghost ghost) {
+        if (ghost.getGhostMode() == GhostMode.FRIGHTENED) {
+            // PacMan can eat ghosts
+            handleCollisionsFrightened(ghost);
+        } else {
+            // If the ghost is NOT in FRIGHTENED mode, resume normal collision handling
+            handleCollisionsNonFrightened(getDynamicEntities());
+            ghosts.forEach(Renderable::reset);
+        }
+    }
+
+
+
+    private void handleCollisionsFrightened(Ghost ghost) {
+            ghostEaten++;
+            this.points = 200 * ghostEaten; // Award points for eating the ghost
+            notifyObserversWithScoreChange(points);
+            ghost.getCurrentState().deactivate();
+            ghost.reset(); // Reset only this specific ghost
+            ghost.setPaused(true); // Pause movement
+            // Create a Timeline to resume movement after 1 second
+            Timeline pauseTimeline = new Timeline(new KeyFrame(
+                    Duration.seconds(1),
+                    e -> {
+                        ghost.setPaused(false); // Resume movement after 1 second
+                        ghost.setGhostMode(GhostMode.SCATTER); // Ensure it goes back to SCATTER mode after pause
+                    }
+            ));
+            pauseTimeline.play();
+    }
+
+    private void handleCollisionsNonFrightened(List<DynamicEntity> dynamicEntities) {
         for (int i = 0; i < dynamicEntities.size(); ++i) {
             DynamicEntity dynamicEntityA = dynamicEntities.get(i);
 
@@ -222,30 +231,38 @@ public class LevelImpl implements Level {
         }
     }
 
-    // Method to handle the ghost reset upon collision with Pacman
-    private void handleGhostCollision(Ghost ghost) {
-        if (ghost.getGhostMode() == GhostMode.FRIGHTENED) {
-            ghostEaten++;
-            this.points = 200 * ghostEaten; // Award points for eating the ghost
-            notifyObserversWithScoreChange(points);
-            ghost.getCurrentState().deactivate();
-            ghost.reset(); // Reset only this specific ghost
-            ghost.setPaused(true); // Pause movement
-            // Create a Timeline to resume movement after 1 second
-            Timeline pauseTimeline = new Timeline(new KeyFrame(
-                    Duration.seconds(1),
-                    e -> {
-                        ghost.setPaused(false); // Resume movement after 1 second
-                        ghost.setGhostMode(GhostMode.SCATTER); // Ensure it goes back to SCATTER mode after pause
+    // Handling collisions with static entities
+    private void handleCollisionsWithStaticEntities(List<DynamicEntity> dynamicEntities) {
+        for (DynamicEntity dynamicEntity : dynamicEntities) {
+            // Check for collisions with static entities
+            if (dynamicEntity instanceof Pacman) {
+                for (StaticEntity staticEntity : getStaticEntities()) {
+                    if (dynamicEntity.collidesWith(staticEntity)) {
+                        dynamicEntity.collideWith(this, staticEntity);
+                        PhysicsEngine.resolveCollision(dynamicEntity, staticEntity);
                     }
-            ));
-            pauseTimeline.play();
-        } else {
-            // If the ghost is NOT in FRIGHTENED mode, handle collisions
-            handleCollisions(getDynamicEntities());
-            ghosts.forEach(Renderable::reset);
+                }
+            }
         }
     }
+
+    // Updating Dynamic entities positions
+    private void updateDynamicEntities(List<DynamicEntity> dynamicEntities) {
+        for (DynamicEntity dynamicEntity : dynamicEntities) {
+
+            //for each ghost, we obtain the current ghost behaviour if it is in CHASE mode.
+            //Then we set the chase position according to the unique ghost behaviour of each ghost.
+
+            ghosts.forEach(ghost -> {
+                if (this.currentGhostMode == GhostMode.CHASE) {
+                    ghost.getGhostBehaviour().chasePosition(ghosts);
+                }
+            });
+            maze.updatePossibleDirections(dynamicEntity);
+            dynamicEntity.update();
+        }
+    }
+
 
 
     @Override
