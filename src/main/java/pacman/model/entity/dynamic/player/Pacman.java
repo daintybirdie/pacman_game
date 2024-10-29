@@ -6,8 +6,6 @@ import pacman.model.entity.dynamic.physics.*;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionSubject;
 import pacman.model.entity.staticentity.collectable.Collectable;
-import pacman.model.entity.staticentity.collectable.Pellet;
-import pacman.model.entity.staticentity.collectable.PowerPelletDecorator;
 import pacman.model.level.Level;
 
 import java.util.HashSet;

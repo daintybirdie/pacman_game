@@ -2,7 +2,6 @@ package pacman.model.maze;
 
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.physics.Vector2D;
-import pacman.model.entity.staticentity.collectable.PowerPelletDecorator;
 import pacman.model.factories.RenderableFactoryRegistry;
 
 import java.io.File;

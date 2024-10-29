@@ -8,7 +8,7 @@ import pacman.model.entity.dynamic.physics.BoundingBoxImpl;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.staticentity.collectable.Collectable;
 import pacman.model.entity.staticentity.collectable.Pellet;
-import pacman.model.entity.staticentity.collectable.PowerPelletDecorator;
+import pacman.model.entity.staticentity.collectable.decorator.PowerPelletDecorator;
 
 import java.util.HashMap;
 import java.util.Map;

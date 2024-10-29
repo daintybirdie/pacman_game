@@ -1,6 +1,7 @@
-package pacman.model.entity.staticentity.collectable;
+package pacman.model.entity.staticentity.collectable.decorator;
 import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostMode;
+import pacman.model.entity.staticentity.collectable.Collectable;
 import pacman.model.level.Level;
 
 /**

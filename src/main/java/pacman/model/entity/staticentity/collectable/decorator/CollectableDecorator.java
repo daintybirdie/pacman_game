@@ -1,9 +1,10 @@
-package pacman.model.entity.staticentity.collectable;
+package pacman.model.entity.staticentity.collectable.decorator;
 
 import javafx.scene.image.Image;
 import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.staticentity.StaticEntityImpl;
+import pacman.model.entity.staticentity.collectable.Collectable;
 import pacman.model.level.Level;
 
 /**
