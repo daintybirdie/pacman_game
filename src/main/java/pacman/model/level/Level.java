@@ -82,13 +82,6 @@ public interface Level extends LevelStateSubject {
     boolean isLevelFinished();
 
     /**
-     * Gets the number of points the player has earned in the level.
-     *
-     * @return number of points the player has earned in the level
-     */
-    int getPoints();
-
-    /**
      * Instructs the level to handle the player losing a life.
      * Level resets dynamic entities to starting positions.
      */

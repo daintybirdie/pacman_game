@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.ghost.statepattern.FrightenedState;
 import pacman.model.entity.dynamic.ghost.statepattern.GhostState;
-import pacman.model.entity.dynamic.ghost.statepattern.NormalState;
+import pacman.model.entity.dynamic.ghost.statepattern.NonFrightenedState;
 import pacman.model.entity.dynamic.physics.*;
 import pacman.model.entity.dynamic.ghost.chasestrategy.GhostChaseBehaviour;
 import pacman.model.level.Level;
@@ -38,7 +38,7 @@ public class GhostImpl implements Ghost {
 
     // State management
     private GhostState currentState; // New field for state management
-    private final GhostState normalState = new NormalState(this); // Normal state
+    private final GhostState normalState = new NonFrightenedState(this); // Normal state
     private final GhostState frightenedState = new FrightenedState(this); // Frightened state
 
     private static final double SOME_DISTANCE = 50;

@@ -27,7 +27,7 @@ public class FrightenedState implements GhostState {
 
     @Override
     public GhostState transitionToNextState() {
-        // Only transition to NormalState instance, if current state is FrightenedState
+        // Only transition to NonFrightenedState instance, if current state is FrightenedState
         if ((ghost.getCurrentState() instanceof FrightenedState)) {
             this.deactivate();
             ghost.setCurrentState(ghost.getNormalState());

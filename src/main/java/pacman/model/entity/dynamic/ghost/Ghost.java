@@ -61,7 +61,7 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
     // Get whether paused boolean
     boolean isPaused();
 
-    // Transition between states for FrightenedState and NormalState
+    // Transition between states for FrightenedState and NonFrightenedState
     void transitionState();
 
     // Setting the ghosts current image
@@ -76,7 +76,7 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
     // Set ghost's current state
     void setCurrentState(GhostState state);
 
-    // Get the ghost's NormalState instance
+    // Get the ghost's NonFrightenedState instance
     GhostState getNormalState();
 
     // Get the ghost's FrightenedState instance

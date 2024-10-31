@@ -2,10 +2,10 @@ package pacman.model.entity.dynamic.ghost.statepattern;
 
 import pacman.model.entity.dynamic.ghost.Ghost;
 
-public class NormalState implements GhostState {
+public class NonFrightenedState implements GhostState {
     Ghost ghost;
 
-    public NormalState(Ghost ghost) {
+    public NonFrightenedState(Ghost ghost) {
         this.ghost = ghost;
     }
     @Override
@@ -17,13 +17,13 @@ public class NormalState implements GhostState {
     @Override
     public void deactivate() {
         // No action needed when leaving normal state, because the activate method in frightened state takes care of this.
-        // This is because there are only two possible states: FrightenedState or NormalState
+        // This is because there are only two possible states: FrightenedState or NonFrightenedState
     }
 
     @Override
     public GhostState transitionToNextState() {
-        // Only transition to FrightenedState instance, if current state is NormalState
-        if ((ghost.getCurrentState() instanceof NormalState)) {
+        // Only transition to FrightenedState instance, if current state is NonFrightenedState
+        if ((ghost.getCurrentState() instanceof NonFrightenedState)) {
             this.deactivate();
             ghost.setCurrentState(ghost.getFrightenedState());
             ghost.getCurrentState().activate();

@@ -366,10 +366,6 @@ public class LevelImpl implements Level {
         }
     }
 
-    @Override
-    public int getPoints() {
-        return this.points;
-    }
 
     @Override
     public int getNumLives() {
