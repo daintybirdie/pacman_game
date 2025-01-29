@@ -18,3 +18,6 @@ Power Pellet Behaviour (Decorator pattern)
 - Package name (where new classes added): pacman.model.entity.staticentity.collectable.decorator
 - Classes involved in design pattern: CollectableDecorator, PowerPelletDecorator, Pellet, Collectable, 
 - Classes involved to implement functionality: StaticEntityImpl, PelletFactory 
+
+
+
